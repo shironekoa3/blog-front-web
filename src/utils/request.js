@@ -46,4 +46,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 //   Promise.reject(error)
 // })
 
+axios.interceptors.response.use(res => res, error => {
+    ElMessage.error('操作失败，网络错误！')
+    Promise.reject(error)
+})
+
 export default axios

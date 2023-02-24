@@ -21,7 +21,7 @@
         <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
                 <el-button link type="primary" size="small" @click="openDialog(scope.row)">修改</el-button>
-                <el-button link type="danger" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
+                <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -96,31 +96,35 @@ export default {
         // 添加 & 修改
         const handleChange = async () => {
             let result = await change(state.optionItem)
-            // console.log(result);
-            if (result.status !== 200) {
-                ElMessage.error('操作失败，网络错误！')
-            } else {
+            console.log(result);
+            if (result.data) {
                 ElMessage.success('操作成功！')
+            } else {
+                ElMessage.error('操作失败！标签已存在！')
             }
             state.dialogVisible = false
             handleRefreshList()
         }
 
         // 删除
-        const handleDelete = (id) => {
+        const handleDelete = (row) => {
             ElMessageBox.confirm('确定要删除吗？', '警告', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
             }).then(async () => {
-                let result = await del(id)
-                // console.log(result);
-                if (result.status !== 200) {
-                    ElMessage.error('操作失败，网络错误！')
+                if (row.refCount > 0) {
+                    ElMessage.error('存在关联文章，请先在文章里删除引用。')
                 } else {
-                    ElMessage.success('操作成功！')
+                    let result = await del(row.id)
+                    console.log(result);
+                    if (result.data) {
+                        ElMessage.success('操作成功！')
+                    } else {
+                        ElMessage.error('操作失败，网络错误！')
+                    }
+                    handleRefreshList()
                 }
-                handleRefreshList()
             }).catch(() => {
                 // 取消
             })

@@ -28,27 +28,27 @@ const router = createRouter({
                 path: '/manager/dashboard',
                 name: 'dashboard',
                 component: () => import('../views/manager/contents/Dashboard.vue'),
-            },{
-                path: '/manager/article/new',
-                name: 'ArticleNew',
-                component: () => import('../views/manager/contents/ArticleNew.vue'),
-            },{
+            }, {
+                path: '/manager/article/edit/:id',
+                name: 'ArticleEdit',
+                component: () => import('../views/manager/contents/ArticleEdit.vue'),
+            }, {
                 path: '/manager/article/list',
                 name: 'ArticleList',
                 component: () => import('../views/manager/contents/ArticleList.vue'),
-            },{
+            }, {
                 path: '/manager/tag',
                 name: 'TagManage',
                 component: () => import('../views/manager/contents/TagManage.vue'),
-            },{
+            }, {
                 path: '/manager/category',
                 name: 'CategoryManage',
                 component: () => import('../views/manager/contents/CategoryManage.vue'),
-            },{
+            }, {
                 path: '/manager/comment',
                 name: 'CommentManage',
                 component: () => import('../views/manager/contents/CommentManage.vue'),
-            },{
+            }, {
                 path: '/manager/setting',
                 name: 'Setting',
                 component: () => import('../views/manager/contents/Setting.vue'),

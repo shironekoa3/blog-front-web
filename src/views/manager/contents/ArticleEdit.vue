@@ -21,9 +21,12 @@
                 <el-input v-model="article.summary" type="textarea" rows="5" placeholder="留空则自动提取文章前面部分文字" />
             </el-form-item>
             <el-form-item label="置顶：" style="text-align: right;">
-                <el-switch v-model="article.isTop" />
+                <el-switch v-model="article.isTopShow" />
+                <el-form-item label="评论：" style="text-align: right;">
+                    <el-switch v-model="article.isCommentShow" />
+                </el-form-item>
                 <el-form-item label="隐藏：" style="text-align: right;">
-                    <el-switch v-model="article.status" />
+                    <el-switch v-model="article.statusShow" />
                 </el-form-item>
             </el-form-item>
         </el-form>
@@ -41,10 +44,10 @@ import { ref, reactive, toRefs } from 'vue';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { ElMessage } from 'element-plus'
-import { list, change, del } from '../../../api/article'
-
+import { get, change } from '../../../api/article'
+import { useRoute } from 'vue-router';
 export default {
-    name: "ArticleNew",
+    name: "ArticleEdit",
     components: {
         MdEditor
     },
@@ -54,30 +57,54 @@ export default {
             tagText: '',
             article: {
                 id: 0,
-                title: '测试文章',
-                content: 'Hello Editor',
+                title: '',
+                content: '',
                 summary: '',
                 category: {
                     id: 0,
-                    name: '教程'
+                    name: ''
                 },
                 thumbnail: '',
                 tags: [],
                 isTop: 0,
-                status: 0
+                isComment: 1,
+                status: 0,
+                isTopShow: false,
+                isCommentShow: true,
+                statusShow: false
             }
         })
+
+        state.article.id = useRoute().params.id
+        if (state.article.id > 0) {
+            get(state.article.id).then(resp => {
+                state.article = resp.data
+                console.log(state.article);
+                state.tagText = resp.data.tags.map(i => i.name).join(', ')
+
+                // Byte 转 Boolean
+                state.article.isTopShow = state.article.isTop === 1 ? true : false
+                state.article.isCommentShow = state.article.isComment === 1 ? true : false
+                state.article.statusShow = state.article.status === 1 ? true : false
+
+                // 删除时间信息，使用后台自动添加的时间
+                delete state.article.createTime
+                delete state.article.updateTime
+            })
+        }
 
         const nextStep = () => {
             if (state.article.title === '') {
                 ElMessage.warning('先填写文章标题吧！')
+            } else if (state.article.content === '') {
+                ElMessage.warning('写点东西吧！')
             } else {
                 state.dialogVisible = true
             }
         }
 
         const submitArticle = async () => {
-            if (state.article.category === '') {
+            if (state.article.category.name === '') {
                 ElMessage.warning('请填写文章分类！')
             } else {
                 // 判断摘要是否填写
@@ -90,8 +117,9 @@ export default {
                     .filter(item => item.name.trim())
 
                 // Boolean 转 Byte
-                state.article.isTop = state.article.isTop ? 1 : 0
-                state.article.status = state.article.status ? 1 : 0
+                state.article.isTop = state.article.isTopShow ? 1 : 0
+                state.article.isComment = state.article.isCommentShow ? 1 : 0
+                state.article.status = state.article.statusShow ? 1 : 0
 
                 // 发送请求
                 console.log(state.article);
@@ -101,6 +129,9 @@ export default {
                     ElMessage.error('操作失败，网络错误！')
                 } else {
                     ElMessage.success('操作成功！')
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 500);
                 }
                 state.dialogVisible = false
             }

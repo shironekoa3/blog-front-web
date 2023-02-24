@@ -15,7 +15,7 @@
                     </el-icon>
                     <span>文章管理</span>
                 </template>
-                <el-menu-item index="/manager/article/new">
+                <el-menu-item index="/manager/article/edit/0">
                     <el-icon>
                         <DocumentAdd />
                     </el-icon>
