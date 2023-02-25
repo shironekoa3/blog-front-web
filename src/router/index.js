@@ -7,12 +7,12 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/manager'
+            redirect: '/home'
         },
         {
             path: '/home',
             name: 'home',
-            component: () => import('../views/Home.vue')
+            component: () => import('../views/front/Home.vue')
         },
         {
             path: '/login',

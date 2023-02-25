@@ -7,7 +7,7 @@
     </div>
 
     <!-- 文章列表表格 -->
-    <el-table :data="tableData" stripe border style="width: 100%; max-height: calc(100vh - 212px);">
+    <el-table :data="tableData" v-loading="isLoading" stripe border style="width: 100%; max-height: calc(100vh - 212px);">
         <el-table-column label="编号" width="100" align="center">
             <template #default="scope">
                 {{ scope.$index + 1 + (page.current - 1) * page.size }}

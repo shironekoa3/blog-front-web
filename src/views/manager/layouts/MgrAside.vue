@@ -4,51 +4,51 @@
             :collapse-transition="false" :router="true">
             <el-menu-item index="/manager/dashboard">
                 <el-icon>
-                    <User />
+                    <home theme="outline" size="24" fill="#333" />
                 </el-icon>
                 <template #title>首页</template>
             </el-menu-item>
             <el-sub-menu index="article">
                 <template #title>
                     <el-icon>
-                        <Wallet />
+                        <list-view theme="outline" size="24" fill="#333" />
                     </el-icon>
                     <span>文章管理</span>
                 </template>
                 <el-menu-item index="/manager/article/edit/0">
                     <el-icon>
-                        <DocumentAdd />
+                        <editor theme="outline" size="24" fill="#333" />
                     </el-icon>
                     <span>新建文章</span>
                 </el-menu-item>
                 <el-menu-item index="/manager/article/list">
                     <el-icon>
-                        <Memo />
+                        <view-list theme="outline" size="24" fill="#333" />
                     </el-icon>
                     <span>文章列表</span>
                 </el-menu-item>
             </el-sub-menu>
             <el-menu-item index="/manager/tag">
                 <el-icon>
-                    <PriceTag />
+                    <tag theme="outline" size="24" fill="#333" />
                 </el-icon>
                 <template #title>标签管理</template>
             </el-menu-item>
             <el-menu-item index="/manager/category">
                 <el-icon>
-                    <CollectionTag />
+                    <category-management theme="outline" size="24" fill="#333" />
                 </el-icon>
                 <template #title>分类管理</template>
             </el-menu-item>
             <el-menu-item index="/manager/comment">
                 <el-icon>
-                    <ChatLineSquare />
+                    <comment theme="outline" size="24" fill="#333" />
                 </el-icon>
                 <template #title>评论管理</template>
             </el-menu-item>
             <el-menu-item index="/manager/setting">
                 <el-icon>
-                    <setting />
+                    <setting-one theme="outline" size="24" fill="#333" />
                 </el-icon>
                 <template #title>站点设置</template>
             </el-menu-item>
@@ -59,9 +59,14 @@
 <script>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { Home, ListView, Editor, ViewList, CategoryManagement, Tag, Comment, SettingOne } from '@icon-park/vue-next'
+
 
 export default {
     name: "mgraside",
+    components: {
+        Home, ListView, Editor, ViewList, CategoryManagement, Tag, Comment, SettingOne
+    },
     setup() {
         let active = ref('')
         let route = useRoute()

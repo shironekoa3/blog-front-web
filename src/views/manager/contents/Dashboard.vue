@@ -2,7 +2,7 @@
     <div class="card-panels">
         <div class="card-panel">
             <div class="card-panel-icon-wrapper">
-                <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+                <list-view theme="outline" size="72" fill="#333" :strokeWidth="2"/>
             </div>
             <div class="card-panel-description">
                 <div class="card-panel-text">
@@ -13,7 +13,7 @@
         </div>
         <div class="card-panel">
             <div class="card-panel-icon-wrapper">
-                <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+                <category-management theme="outline" size="72" fill="#333" :strokeWidth="2"/>
             </div>
             <div class="card-panel-description">
                 <div class="card-panel-text">
@@ -24,7 +24,7 @@
         </div>
         <div class="card-panel">
             <div class="card-panel-icon-wrapper">
-                <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+                <tag theme="outline" size="72" fill="#333" :strokeWidth="2"/>
             </div>
             <div class="card-panel-description">
                 <div class="card-panel-text">
@@ -35,7 +35,7 @@
         </div>
         <div class="card-panel">
             <div class="card-panel-icon-wrapper">
-                <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+                <chart-histogram theme="outline" size="72" fill="#333" :strokeWidth="2"/>
             </div>
             <div class="card-panel-description">
                 <div class="card-panel-text">
@@ -53,11 +53,13 @@
 import CountTo from '../../../components/VueCountTo/vue-countTo.vue'
 import * as echarts from 'echarts';
 import { ref, onMounted, onUnmounted } from 'vue';
+import { ListView, CategoryManagement, Tag, ChartHistogram } from '@icon-park/vue-next'
 
 export default {
     name: "dashboard",
     components: {
-        CountTo
+        CountTo,
+        ListView, CategoryManagement, Tag, ChartHistogram
     },
     setup() {
         let myChart
@@ -131,13 +133,12 @@ export default {
 }
 
 .card-panel-icon-wrapper {
-    width: 100px;
-    height: 100px;
-    margin: 12px 0;
-    margin-left: 12px;
-
+    width: 72px;
+    height: 72px;
+    margin: 26px 0;
+    margin-left: 26px;
     float: left;
-    background-color: rgba(0, 0, 0, 0.2);
+    /* background-color: rgba(0, 0, 0, 0.2); */
 }
 
 .card-panel-description {
