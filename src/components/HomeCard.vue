@@ -1,5 +1,5 @@
 <template>
-    <div class="box-card">
+    <div class="box-card" :style="{ width: width + 'px' }">
         <div v-if="head" class="card-header">
             <slot name="icon">
                 <!-- <speaker-one theme="filled" size="20" fill="#f4ca1c" /> -->
@@ -26,6 +26,10 @@ export default {
         head: {
             default: true,
             type: Boolean
+        },
+        width: {
+            default: '260',
+            type: String
         }
     }
 };
@@ -33,7 +37,6 @@ export default {
 <style scoped>
 .box-card {
     width: 260px;
-    border: 1px solid #e4e7ed;
     border-radius: 6px;
     overflow: hidden;
     color: #303133;
@@ -45,6 +48,8 @@ export default {
 .card-header {
     padding: 10px 12px;
     border-bottom: 1px solid #e4e7ed;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .card-header-item {
@@ -62,9 +67,4 @@ export default {
     background-color: #fc625d;
     box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
 }
-
-.card-content {
-    padding: 20px;
-}
 </style>
-  
