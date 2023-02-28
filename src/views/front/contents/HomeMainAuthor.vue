@@ -35,6 +35,7 @@
 import { reactive, toRefs, inject } from 'vue'
 import HomeCard from '../../../components/HomeCard.vue';
 import vueCountTo from '../../../components/VueCountTo/vue-countTo.vue';
+import { useConfigStore } from '../../../store';
 export default {
     name: "HomeMainAuthor",
     components: {
@@ -45,8 +46,8 @@ export default {
         const state = reactive({
         })
 
-        let config = inject('config')
-
+        let { config } = useConfigStore()
+        
         return {
             ...toRefs(state),
             config

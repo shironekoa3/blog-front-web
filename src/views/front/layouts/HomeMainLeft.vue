@@ -27,6 +27,7 @@ import { SpeakerOne, Tag } from '@icon-park/vue-next';
 import vueCountTo from '../../../components/VueCountTo/vue-countTo.vue';
 import HomeMainAuthor from '../contents/HomeMainAuthor.vue'
 import HomeMainCardCloud from '../contents/HomeMainTagCloud.vue'
+import { useConfigStore } from '../../../store';
 export default {
     name: "HomeMainLeft",
     components: {
@@ -40,9 +41,7 @@ export default {
         const state = reactive({
 
         })
-
-        let config = inject('config')
-
+        let { config } = useConfigStore()
         return {
             ...toRefs(state),
             config

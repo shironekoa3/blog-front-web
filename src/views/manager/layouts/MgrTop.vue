@@ -3,25 +3,23 @@
         <h1>BLOG</h1>
         <div class="top-info">
             <div class="top-avatar">
-                <el-avatar v-if="avatarUrl == ''">{{ username.substring(0, 1) }}</el-avatar>
-                <el-avatar v-if="avatarUrl != ''" :src="avatarUrl" />
+                <el-avatar v-if="config.avatar == ''">{{ config.author.substring(0, 1) }}</el-avatar>
+                <el-avatar v-if="config.avatar != ''" :src="config.avatar" />
             </div>
-            <p>{{ username }}</p>
+            <p>{{ config.author }}</p>
         </div>
     </div>
 </template>
   
 <script>
-
 import { ref } from 'vue';
+import { useConfigStore } from '../../../store';
 export default {
     name: "mgrtop",
     setup() {
-        let avatarUrl = ref('https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png')
-        let username = ref('向日葵')
-
+        let { config } = useConfigStore()
         return {
-            avatarUrl, username
+            config
         }
     }
 };

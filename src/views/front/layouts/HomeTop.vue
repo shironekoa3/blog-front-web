@@ -1,35 +1,41 @@
 <template>
-    <header :class="{ 'header-hidden': config.isHeaderHidden }" :style="{ backgroundImage: `url(${getHeadImg()})` }">
-        <HomeTopNav :config="config" />
+    <header :class="{ 'header-hidden': config.isHeaderHidden }" :style="{ backgroundImage: `url(${headerImg})` }">
+        <HomeTopNav />
         <div v-if="!config.isHeaderHidden" class="information">
             <h3>{{ config.currArticle.id ? config.currArticle.title : config.title }}</h3>
-            <div v-if="config.currArticle.id" class="info-box" style="margin: 10px 0;">
-                <div class="info-box-item">
-                    <calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
-                    <span>发表于 {{ config.currArticle.createTime }}</span>
-                </div>
-                <div class="info-box-item">
-                    <category-management theme="filled" size="18" fill="#fc625d"
-                        style="vertical-align: -3px; margin-right: 4px;" />
-                    <span>{{ config.currArticle.category.name }}</span>
-                </div>
-                <div class="info-box-item" v-if="config.currArticle.tags.length > 0">
-                    <bookmark-one theme="filled" size="18" fill="#35cd4b"
-                        style="vertical-align: -3px; margin-right: 4px;" />
-                    <span>{{ config.currArticle.tags.map(item => item.name).join('·') }}</span>
-                </div>
-                <div class="info-box-item">
-                    <camera-one theme="filled" size="18" fill="#73aaff" style="vertical-align: -3px; margin-right: 4px;" />
-                    <span>{{ config.currArticle.viewCount }}</span>
+            <div v-if="config.isShowDescription">
+                <!-- 如果 currArticle 没有值，则显示网站描述。否则显示文章标签 -->
+                <p v-if="!config.currArticle.id">{{ config.description }}</p>
+                <div v-else class="info-box" style="margin: 10px 0;">
+                    <div class="info-box-item">
+                        <calendar theme="filled" size="18" fill="#fdbc40"
+                            style="vertical-align: -3px; margin-right: 4px;" />
+                        <span>发表于 {{ config.currArticle.createTime }}</span>
+                    </div>
+                    <div class="info-box-item">
+                        <category-management theme="filled" size="18" fill="#fc625d"
+                            style="vertical-align: -3px; margin-right: 4px;" />
+                        <span>{{ config.currArticle.category.name }}</span>
+                    </div>
+                    <div class="info-box-item" v-if="config.currArticle.tags.length > 0">
+                        <bookmark-one theme="filled" size="18" fill="#35cd4b"
+                            style="vertical-align: -3px; margin-right: 4px;" />
+                        <span>{{ config.currArticle.tags.map(item => item.name).join('·') }}</span>
+                    </div>
+                    <div class="info-box-item">
+                        <camera-one theme="filled" size="18" fill="#73aaff"
+                            style="vertical-align: -3px; margin-right: 4px;" />
+                        <span>{{ config.currArticle.viewCount }}</span>
+                    </div>
                 </div>
             </div>
-            <p v-else>{{ config.description }}</p>
         </div>
     </header>
 </template>
 
 <script>
-import { reactive, toRefs, inject } from 'vue'
+import { reactive, toRefs, watchEffect } from 'vue'
+import { useConfigStore } from '../../../store';
 import { Calendar, CategoryManagement, BookmarkOne, CameraOne } from '@icon-park/vue-next';
 import HomeTopNav from '../contents/HomeTopNav.vue'
 export default {
@@ -40,29 +46,26 @@ export default {
     },
     setup() {
         const state = reactive({
+            headerImg: '',
         })
 
-        let config = inject('config')
+        let { config } = useConfigStore()
 
 
-        const getHeadImg = () => {
-            let imgUrl = ''
+        watchEffect(() => {
             if (!config.isHeaderHidden) {
-                if (config.currArticle.id && config.currArticle.thumbnail) {
-                    imgUrl = config.currArticle.thumbnail
+                if (config.currArticle && config.currArticle.id && config.currArticle.thumbnail) {
+                    state.headerImg = config.currArticle.thumbnail
                 } else {
-                    imgUrl = config.headerImg
+                    state.headerImg = config.headerImg
                 }
             }
-            return imgUrl
-        }
+        })
 
         return {
             ...toRefs(state),
-            config,
-            getHeadImg
+            config
         }
-
     }
 };
 </script>
@@ -81,13 +84,16 @@ header {
 
 .information {
     color: white;
-    display: inline-block;
     width: 100%;
-    text-align: center;
-    margin-top: 80px;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .information h3 {
+    margin-top: -50px;
     letter-spacing: 5px;
     font-size: 36px;
 }

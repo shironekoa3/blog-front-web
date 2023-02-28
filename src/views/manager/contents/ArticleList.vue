@@ -33,7 +33,7 @@
     <!-- 分页结构 -->
     <div style="height: 60px;">
         <el-pagination layout="prev, pager, next" :page-size="page.size" :page-count="page.count"
-            v-model:current-page="page.current" style="padding-top: 14px;" />
+            v-model:current-page="page.current" @current-change="handleRefreshList" style="padding-top: 14px;" />
     </div>
 </template>
   
@@ -78,7 +78,6 @@ export default {
                 type: 'warning',
             }).then(async () => {
                 let result = await del(id)
-                // console.log(result);
                 if (result.status !== 200) {
                     ElMessage.error('操作失败，网络错误！')
                 } else {
@@ -92,31 +91,30 @@ export default {
 
         const handleRefreshList = async () => {
             state.isLoading = true
-            let result = await list();
+            let pageInfo = {
+                'p': state.page.current,
+                'size': state.page.size
+            }
+            let result = await list(pageInfo);
             if (result.status !== 200) {
                 ElMessage.error('获取失败，网络错误！')
             } else {
-                state.rowData = result.data
-                console.log(state.rowData);
+                state.rowData = result.data.records
                 state.rowData.forEach(item => {
                     item.createTime = timeFormater(item.createTime).format('YYYY-MM-DD HH:mm:ss')
                     item.updateTime = timeFormater(item.updateTime).format('YYYY-MM-DD HH:mm:ss')
                 })
-                state.page.count = Math.ceil(state.rowData.length / state.page.size)
+                state.page.count = result.data.pages
+                state.tableData = state.rowData
+                state.tableData.forEach(item => {
+                    item.tagText = item.tags.map(tag => tag.name)
+                    item.isCommentText = item.isComment ? '是' : '否'
+                    item.isTopText = item.isTop ? '是' : '否'
+                    item.statusText = item.status ? '是' : '否'
+                })
             }
             state.isLoading = false;
         }
-
-        watchEffect(() => {
-            let start = (state.page.current - 1) * state.page.size
-            state.tableData = state.rowData.slice(start, start + state.page.size)
-            state.tableData.forEach(item => {
-                item.tagText = item.tags.map(tag => tag.name)
-                item.isCommentText = item.isComment ? '是' : '否'
-                item.isTopText = item.isTop ? '是' : '否'
-                item.statusText = item.status ? '是' : '否'
-            })
-        })
 
         return {
             ...toRefs(state),

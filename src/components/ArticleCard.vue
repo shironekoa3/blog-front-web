@@ -1,11 +1,12 @@
 <template>
     <div class="article-card">
         <div class="content-box" :style="{ marginRight: article.thumbnail === '' ? '0' : '300px' }">
-            <h3 class="title">{{ article.title }}</h3>
+            <span class="article-top" v-if="article.isTop">置顶</span>
+            <RouterLink class="title" :to="article.link">{{ article.title }}</RouterLink>
             <div class="info-box" style="margin: 10px 0;">
                 <div class="info-box-item">
                     <calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
-                    <span>发表于 {{ article.createTime }}</span>
+                    <span>发表于{{ article.createTime }}</span>
                 </div>
                 <div class="info-box-item">
                     <category-management theme="filled" size="18" fill="#fc625d"
@@ -40,6 +41,8 @@ export default {
     props: {
         article: {
             default: {
+                id: 1,
+                link: '/article/1',
                 title: '默认文章标题',
                 summary: '默认文要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要~~',
                 createTime: '2023-01-01',
@@ -72,10 +75,31 @@ export default {
     position: relative;
     max-height: 148px;
 }
+
 .title {
+    color: #303133;
     font-size: 28px;
     font-weight: 400;
+    cursor: pointer;
+    transition: 0.3s;
 }
+
+.title:hover {
+    color: #73aaff;
+}
+
+.article-top {
+    font-size: 18px;
+    margin-right: 6px;
+    padding: 2px 12px;
+    position: relative;
+    top: -4px;
+    color: #ffffff;
+    user-select: none;
+    background-image: linear-gradient(to top, #f77062 0%, #fe5196 100%);
+    border-radius: 4px;
+}
+
 
 .info-box {
     display: flex;
@@ -101,8 +125,8 @@ export default {
     overflow: hidden;
     letter-spacing: 1px;
     font-weight: 100;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.25);
-    
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+
 }
 
 .img-box {

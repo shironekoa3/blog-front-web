@@ -4,87 +4,56 @@
             <a href="/" title="首页">
                 <el-avatar class="nav-img" :src="config.avatar" />
             </a>
-            <div class="nav-menu">
-                <div class="nav-menu-item">
-                    <a href="#">
-                        <span class="nav-menu-item-nc" v-text="'首页'" title="首页"
-                            :style="{ 'color': config.isHeaderHidden ? '#666' : '#fff' }">
-                        </span>
-                    </a>
-                </div>
-                <div class="nav-menu-item">
-                    <div class="dropdown">
-                        <span class="dropdown-text" :style="{ 'color': config.isHeaderHidden ? '#666' : '#fff' }">
-                            分类
-                            <i style="vertical-align: -2px;">
-                                <down theme="outline" size="20" :fill="config.isHeaderHidden ? '#666' : '#fff'" />
-                            </i>
-                        </span>
-                        <div class="dropdown-content">
-                            <a href="#">
-                                <span v-text="'子菜单'"></span>
-                            </a>
-                            <a href="#">
-                                <span v-text="'子菜单'"></span>
-                            </a>
-                            <a href="#">
-                                <span v-text="'子菜单'"></span>
-                            </a>
+            <div class="nav-menu" v-if="JSON.stringify(config) !== '{}'">
+                <template v-for="(key, i) in Object.keys(config.nav)" :id="i">
+                    <div class="nav-menu-item" v-if="!(config.nav[key] instanceof Object)">
+                        <a :href="config.nav[key]">
+                            <span class="nav-menu-item-nc" v-text="key" :title="key"
+                                :style="{ 'color': config.isHeaderHidden ? '#666' : '#fff' }">
+                            </span>
+                        </a>
+                    </div>
+                    <div class="nav-menu-item" v-else>
+                        <div class="dropdown">
+                            <span class="dropdown-text" :style="{ 'color': config.isHeaderHidden ? '#666' : '#fff' }">
+                                {{ key }}
+                                <i style="vertical-align: -2px;">
+                                    <down theme="outline" size="20" :fill="config.isHeaderHidden ? '#666' : '#fff'" />
+                                </i>
+                            </span>
+                            <div class="dropdown-content">
+                                <template v-for="(childKey, j) in Object.keys(config.nav[key])" :id="j">
+                                    <a :href="config.nav[key][childKey]">
+                                        <span v-text="childKey"></span>
+                                    </a>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </template>
             </div>
         </nav>
     </div>
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from 'vue';
+import { reactive, toRefs, onMounted, watchEffect } from 'vue';
 import { Down } from '@icon-park/vue-next';
-
+import { useConfigStore } from '../../../store';
 export default {
     name: "HomeTopNav",
     components: {
         Down
     },
-    props: ['config'],
     setup() {
         const state = reactive({
-            navLinks: [],
         })
 
-        const getNavLinks = () => {
-            let tempdata = []
-
-            // 取出所有父级节点 并排序
-            let topMenu = tempdata.filter(item => {
-                return item.parentId === 0
-            }).sort((a, b) => {
-                return a.id - b.id
-            });
-
-            // 取出所有子节点，插入到父节点的 children 属性里面
-            tempdata.filter(item => {
-                return item.parentId !== 0
-            }).sort((a, b) => {
-                return a.id - b.id
-            }).forEach(item => {
-                topMenu.forEach(topItem => {
-                    if (item.parentId === topItem.id) {
-                        topItem.children.push(item);
-                    }
-                });
-            });
-
-            state.navLinks = topMenu;
-        }
-
-        onMounted(() => {
-            getNavLinks()
-        })
+        let { config } = useConfigStore()
+        
         return {
             ...toRefs(state),
-            getNavLinks
+            config
         }
     }
 };

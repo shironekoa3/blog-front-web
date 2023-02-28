@@ -2,7 +2,7 @@
     <div class="article-detail-box">
         <nav>
             <home theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
-            <a href="/">首页</a>
+            <RouterLink to="/">首页</RouterLink>
             <span> / </span>
             <a href="/">{{ article.category.name }}</a>
             <span> / </span>
@@ -19,15 +19,20 @@ import { inject, onMounted, onUnmounted } from 'vue';
 import { Home } from '@icon-park/vue-next';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+import { RouterLink } from 'vue-router';
 
 export default {
     name: "ArticleDetail",
     components: {
-        MdEditor, Home
+        MdEditor,
+        Home,
+        RouterLink
     },
     props: {
         article: {
             default: {
+                id: 1,
+                link: '/article/1',
                 title: '默认文章标题',
                 summary: '默认文要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要~~',
                 createTime: '2023-01-01',
@@ -47,16 +52,6 @@ export default {
         }
     },
     setup(props) {
-        let config = inject('config')
-        // console.log(props.article.content);
-
-        onMounted(() => {
-            config.currArticle = props.article
-        })
-
-        onUnmounted(() => {
-            config.currArticle = {}
-        })
         return {
         }
     }
