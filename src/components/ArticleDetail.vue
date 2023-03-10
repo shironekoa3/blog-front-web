@@ -15,18 +15,19 @@
 </template>
 
 <script>
-import { inject, onMounted, onUnmounted } from 'vue';
+import { ref } from 'vue';
 import { Home } from '@icon-park/vue-next';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
-import { RouterLink } from 'vue-router';
-
+import { RouterLink, useRouter } from 'vue-router';
+import BoxLoading from './BoxLoading.vue';
 export default {
     name: "ArticleDetail",
     components: {
         MdEditor,
         Home,
-        RouterLink
+        RouterLink,
+        BoxLoading
     },
     props: {
         article: {
@@ -51,8 +52,15 @@ export default {
             type: Object
         }
     },
-    setup(props) {
+    setup() {
+        let router = useRouter()
+
+        function returnToHome() {
+            router.push('/')
+        }
+
         return {
+            returnToHome
         }
     }
 

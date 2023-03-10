@@ -18,6 +18,8 @@ export const useConfigStore = defineStore('config', () => {
         articleCount: 0,
         nav: {},
         footer: '',
+        isShowDescription: true,
+        tags: [],
         currArticle: {
             id: 0,
             title: '',
@@ -35,9 +37,8 @@ export const useConfigStore = defineStore('config', () => {
             thumbnail: '',
             viewCount: 0
         },
-        isShowDescription: true,
-        tags: []
     })
+
 
     // 获取网站配置
     listOption().then(response => {
@@ -54,7 +55,7 @@ export const useConfigStore = defineStore('config', () => {
             config.nav = JSON.parse(config.nav)
             config.viewCount = Number(config.viewCount)
         }
-        console.log('数据获取完成！', config);
+        // console.log('数据获取完成！', config);
     })
 
     return {

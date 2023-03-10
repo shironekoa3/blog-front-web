@@ -2,7 +2,8 @@
     <div class="article-card">
         <div class="content-box" :style="{ marginRight: article.thumbnail === '' ? '0' : '300px' }">
             <span class="article-top" v-if="article.isTop">置顶</span>
-            <RouterLink class="title" :to="article.link">{{ article.title }}</RouterLink>
+            <!-- <RouterLink :to="article.link" class="title">{{ article.title }}</RouterLink> -->
+            <a class="title" style="cursor: pointer;" @click="router.push(article.link)">{{ article.title }}</a>
             <div class="info-box" style="margin: 10px 0;">
                 <div class="info-box-item">
                     <calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
@@ -35,6 +36,7 @@
 
 <script>
 import { Calendar, CategoryManagement, BookmarkOne, CameraOne } from '@icon-park/vue-next';
+import { useRouter } from 'vue-router';
 export default {
     name: "ArticleCard",
     components: { Calendar, CategoryManagement, BookmarkOne, CameraOne },
@@ -59,8 +61,13 @@ export default {
             },
             type: Object
         }
+    },
+    setup() {
+        let router = useRouter()
+        return {
+            router
+        }
     }
-
 };
 </script>
 <style scoped>

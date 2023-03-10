@@ -4,7 +4,7 @@
             <div style="padding: 20px;">
                 <div class="avatar-box">
                     <div>
-                        <a href="#">
+                        <a style="cursor: pointer;" @click="avatarClick">
                             <el-avatar class="avatar-img" :src="config.avatar" />
                         </a>
                     </div>
@@ -36,6 +36,7 @@ import { reactive, toRefs, inject } from 'vue'
 import HomeCard from '../../../components/HomeCard.vue';
 import vueCountTo from '../../../components/VueCountTo/vue-countTo.vue';
 import { useConfigStore } from '../../../store';
+import { useRouter } from 'vue-router';
 export default {
     name: "HomeMainAuthor",
     components: {
@@ -44,13 +45,31 @@ export default {
     },
     setup() {
         const state = reactive({
+            count: 0
         })
 
         let { config } = useConfigStore()
-        
+
+        let router = useRouter()
+
+        let timerId = 0
+        const avatarClick = () => {
+            clearTimeout(timerId)
+            state.count++
+            if (state.count >= 5) {
+                state.count = 0
+                router.push('/manager')
+            } else {
+                timerId = setTimeout(() => {
+                    state.count = 0
+                }, 2000)
+            }
+        }
+
         return {
             ...toRefs(state),
-            config
+            config,
+            avatarClick
         }
     }
 };

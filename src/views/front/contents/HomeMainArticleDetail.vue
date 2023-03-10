@@ -1,47 +1,109 @@
 <template>
+    <BoxLoading :isLoading="isLoading" />
     <ArticleDetail :article="config.currArticle" />
     <div style="margin-top: 20px;"></div>
     <ArticleCopyright />
+    <div style="margin-top: 20px;"></div>
+    <CommentCard :commentList="commentList" @onSendComment="onSendComment" />
 </template>
 
 <script>
-import { reactive, toRefs, onUnmounted } from 'vue';
+import { ref, reactive, toRef, toRefs, onUnmounted } from 'vue';
 import ArticleCopyright from '../../../components/ArticleCopyright.vue';
 import ArticleDetail from '../../../components/ArticleDetail.vue';
 import { useConfigStore } from '../../../store';
 import { useRoute, useRouter } from 'vue-router';
-import { get } from '../../../api/article';
+import { get as getArticle } from '../../../api/article';
+import { getByArticleId, save as saveComment } from '../../../api/comment';
+import CommentCard from '../../../components/CommentCard.vue';
+import { ElMessage } from 'element-plus';
+import timeFormater from 'time-formater'
+
 export default {
     name: "HomeMainArticleDetail",
     components: {
         ArticleDetail,
-        ArticleCopyright
+        ArticleCopyright,
+        CommentCard
     },
     setup() {
         const state = reactive({
-
+            isLoading: true,
+            commentList: []
         })
 
         let { config } = useConfigStore()
+
+        // 加载文章
         let id = useRoute().params.id
         if (id > 0) {
-            get(id).then(response => {
+            getArticle(id).then(response => {
                 if (response.status !== 200) {
                     ElMessage.error('文章获取失败！')
                 } else {
                     config.currArticle = response.data
-                    console.log(config.currArticle);
+                    state.isLoading = false
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
                 }
             })
         }
 
+        // 加载评论
+        const refreshComment = () => {
+            getByArticleId(id).then(response => {
+                if (response.status !== 200) {
+                    ElMessage.error('评论获取失败！')
+                } else {
+                    state.commentList = response.data
+                    state.commentList.forEach(item => {
+                        item.createTime = timeFormater(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                        item.updateTime = timeFormater(item.updateTime).format('YYYY-MM-DD HH:mm:ss')
+                    })
+                }
+            })
+        }
+        refreshComment()
+
+        const onSendComment = (comment) => {
+            comment.articleId = config.currArticle.id
+            saveComment(comment).then(response => {
+                if (response.status !== 200) {
+                    ElMessage.error('评论失败！')
+                } else {
+                    ElMessage.success('评论成功！')
+                    refreshComment()
+                }
+            })
+        }
+
+
         onUnmounted(() => {
-            config.currArticle = { id: 0, title: '' }
+            config.currArticle = {
+                id: 0,
+                title: '',
+                categoryId: 0,
+                category: {},
+                content: '',
+                createBy: 1,
+                createTime: '',
+                updateTime: '',
+                isComment: true,
+                isDeleted: false,
+                status: false,
+                summary: '',
+                tags: [],
+                thumbnail: '',
+                viewCount: 0
+            }
         })
 
         return {
             ...toRefs(state),
-            config
+            config,
+            onSendComment
         }
     }
 };

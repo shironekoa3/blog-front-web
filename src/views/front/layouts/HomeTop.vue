@@ -54,7 +54,7 @@ export default {
 
         watchEffect(() => {
             if (!config.isHeaderHidden) {
-                if (config.currArticle && config.currArticle.id && config.currArticle.thumbnail) {
+                if (config.currArticle.id && config.currArticle.thumbnail) {
                     state.headerImg = config.currArticle.thumbnail
                 } else {
                     state.headerImg = config.headerImg

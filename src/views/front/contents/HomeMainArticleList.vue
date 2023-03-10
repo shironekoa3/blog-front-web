@@ -1,13 +1,14 @@
 <template>
     <div class="article-list">
+        <BoxLoading :isLoading="isLoading" />
         <div class="article-item" v-for="(article, i) in config.articles" :id="i" style="margin-bottom: 20px;">
             <ArticleCard :article="article" />
         </div>
     </div>
     <div class="pagination-box">
         <!-- <el-pagination class="pagination" background layout="prev, pager, next" :total="1000" /> -->
-        <el-pagination class="pagination" background layout="prev, pager, next" :page-size="page.size" :page-count="page.count"
-            v-model:current-page="page.current" @current-change="refreshArticlePage" />
+        <el-pagination class="pagination" background layout="prev, pager, next" :page-size="page.size"
+            :page-count="page.count" v-model:current-page="page.current" @current-change="refreshArticlePage" />
     </div>
 </template>
 
@@ -15,10 +16,9 @@
 import { reactive, toRefs, inject } from 'vue';
 import ArticleCard from '../../../components/ArticleCard.vue';
 import { useConfigStore } from '../../../store';
-import { listHome } from '../../../api/article';
+import { get, listHome } from '../../../api/article';
 import timeFormater from 'time-formater'
-
-
+import { useRouter } from 'vue-router';
 export default {
     name: "HomeMainArticleList",
     components: {
@@ -30,27 +30,41 @@ export default {
                 count: 0,
                 size: 5,
                 current: 1
-            }
+            },
+            isLoading: true
         })
 
         let { config } = useConfigStore()
+        let router = useRouter()
 
         const refreshArticlePage = () => {
-            // 获取文章数据
-            listHome({ p: state.page.current, size: state.page.size }).then(response => {
-                if (response.status !== 200) {
-                    ElMessage.error('文章获取失败！')
-                } else {
-                    console.log(response.data);
-                    state.page.count = response.data.pages
-                    config.articles = response.data.records.map(i => {
-                        i.createTime = timeFormater(i.createTime).format('YYYY-MM-DD')
-                        i.updateTime = timeFormater(i.updateTime).format('YYYY-MM-DD')
-                        i.link = `/article/${i.id}`
-                        return i
-                    })
-                }
-            })
+            // 延迟500ms加载第二页
+            state.isLoading = true
+
+            setTimeout(() => {
+                // 获取文章数据
+                listHome({ p: state.page.current, size: state.page.size }).then(response => {
+                    if (response.status !== 200) {
+                        ElMessage.error('文章获取失败！')
+                    } else {
+                        state.page.count = response.data.pages
+                        config.articles = response.data.records.map(i => {
+                            i.createTime = timeFormater(i.createTime).format('YYYY-MM-DD')
+                            i.updateTime = timeFormater(i.updateTime).format('YYYY-MM-DD')
+                            i.link = `/article/${i.id}`
+                            return i
+                        })
+                        state.isLoading = false
+
+                        // 滚动
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+                    }
+                })
+            }, 500);
+
         }
 
         refreshArticlePage()
@@ -65,6 +79,10 @@ export default {
 };
 </script>
 <style>
+.article-list {
+    min-height: 500px;
+}
+
 .article-item {
     margin-top: 0;
     transition: all 0.5s;

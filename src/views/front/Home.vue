@@ -1,6 +1,6 @@
 <template>
     <HomeTop />
-    <main v-loading="false">
+    <main>
         <div class="main-left">
             <HomeMainLeft />
         </div>
@@ -48,6 +48,7 @@ main {
     margin: 20px auto 40px;
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
 .main-right {
