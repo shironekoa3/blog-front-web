@@ -1,7 +1,7 @@
 <template>
     <div class="article-detail-box">
         <nav>
-            <home theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
+            <i-home theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
             <RouterLink to="/">首页</RouterLink>
             <span> / </span>
             <a href="/">{{ article.category.name }}</a>
@@ -14,57 +14,39 @@
     </div>
 </template>
 
-<script>
-import { ref } from 'vue';
-import { Home } from '@icon-park/vue-next';
+<script setup>
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { RouterLink, useRouter } from 'vue-router';
-import BoxLoading from './BoxLoading.vue';
-export default {
-    name: "ArticleDetail",
-    components: {
-        MdEditor,
-        Home,
-        RouterLink,
-        BoxLoading
-    },
-    props: {
-        article: {
-            default: {
-                id: 1,
-                link: '/article/1',
-                title: '默认文章标题',
-                summary: '默认文要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要~~',
-                createTime: '2023-01-01',
-                thumbnail: '/images/54.webp',
-                category: {
-                    id: 0,
-                    name: '默认分类'
-                },
-                tags: [
-                    { id: 0, name: '标签1' },
-                    { id: 0, name: '标签2' }
-                ],
-                viewCount: 999,
-                content: '默认文章内容'
+
+defineProps({
+    article: {
+        default: {
+            id: 1,
+            link: '/article/1',
+            title: '默认文章标题',
+            summary: '默认文要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要~~',
+            createTime: '2023-01-01',
+            thumbnail: '/images/54.webp',
+            category: {
+                id: 0,
+                name: '默认分类'
             },
-            type: Object
-        }
-    },
-    setup() {
-        let router = useRouter()
-
-        function returnToHome() {
-            router.push('/')
-        }
-
-        return {
-            returnToHome
-        }
+            tags: [
+                { id: 0, name: '标签1' },
+                { id: 0, name: '标签2' }
+            ],
+            viewCount: 999,
+            content: '默认文章内容'
+        },
+        type: Object
     }
+})
+let router = useRouter()
 
-};
+function returnToHome() {
+    router.push('/')
+}
 </script>
 <style scoped>
 .article-detail-box {

@@ -6,7 +6,7 @@
         </el-button-group>
     </div>
 
-    <!-- 文章列表表格 -->
+    <!-- 列表表格 -->
     <el-table v-loading="isLoading" :data="tableData" stripe border style=" max-height: calc(100vh - 212px);">
         <el-table-column label="编号" width="100" align="center">
             <template #default="scope">
@@ -96,7 +96,6 @@ export default {
         // 添加 & 修改
         const handleChange = async () => {
             let result = await change(state.optionItem)
-            console.log(result);
             if (result.data) {
                 ElMessage.success('操作成功！')
             } else {

@@ -8,23 +8,34 @@
                 <template v-for="(key, i) in Object.keys(config.nav)" :id="i">
                     <div class="nav-menu-item" v-if="!(config.nav[key] instanceof Object)">
                         <a :href="config.nav[key]">
-                            <span class="nav-menu-item-nc" v-text="key" :title="key"
+                            <span class="nav-menu-item-nc" :title="key"
                                 :style="{ 'color': config.isHeaderHidden ? '#666' : '#fff' }">
+                                <i style="vertical-align: -2px;" v-if="key.includes('||')">
+                                    <component :is="`i-${key.split('||')[1].trim()}`" theme="outline" size="20"
+                                        :fill="config.isHeaderHidden ? '#666' : '#fff'" />
+                                </i>
+                                {{ key.includes('||') ? key.split('||')[0].trim() : key }}
                             </span>
                         </a>
                     </div>
                     <div class="nav-menu-item" v-else>
                         <div class="dropdown">
                             <span class="dropdown-text" :style="{ 'color': config.isHeaderHidden ? '#666' : '#fff' }">
-                                {{ key }}
+                                <i style="vertical-align: -2px;" v-if="key.includes('||')">
+                                    <component :is="`i-${key.split('||')[1].trim()}`" theme="outline" size="20"
+                                        :fill="config.isHeaderHidden ? '#666' : '#fff'" />
+                                </i>
+                                {{ key.includes('||') ? key.split('||')[0].trim() : key }}
                                 <i style="vertical-align: -2px;">
-                                    <down theme="outline" size="20" :fill="config.isHeaderHidden ? '#666' : '#fff'" />
+                                    <i-down theme="outline" size="20" :fill="config.isHeaderHidden ? '#666' : '#fff'" />
                                 </i>
                             </span>
                             <div class="dropdown-content">
                                 <template v-for="(childKey, j) in Object.keys(config.nav[key])" :id="j">
                                     <a :href="config.nav[key][childKey]">
-                                        <span v-text="childKey"></span>
+                                        <span>
+                                            {{ childKey }}
+                                        </span>
                                     </a>
                                 </template>
                             </div>
@@ -36,27 +47,11 @@
     </div>
 </template>
 
-<script>
-import { reactive, toRefs, onMounted, watchEffect } from 'vue';
-import { Down } from '@icon-park/vue-next';
+<script setup>
 import { useConfigStore } from '../../../store';
-export default {
-    name: "HomeTopNav",
-    components: {
-        Down
-    },
-    setup() {
-        const state = reactive({
-        })
 
-        let { config } = useConfigStore()
-        
-        return {
-            ...toRefs(state),
-            config
-        }
-    }
-};
+let { config } = useConfigStore()
+
 </script>
 <style scoped>
 .nav-container {
@@ -66,7 +61,7 @@ export default {
 }
 
 nav {
-    width: 80%;
+    width: 1200px;
     height: 60px;
 }
 

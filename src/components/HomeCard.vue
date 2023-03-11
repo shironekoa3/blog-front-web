@@ -15,24 +15,21 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: "HomeCard",
-    props: {
-        title: {
-            default: '卡片',
-            type: String
-        },
-        head: {
-            default: true,
-            type: Boolean
-        },
-        width: {
-            default: '260',
-            type: String
-        }
+<script setup>
+defineProps({
+    title: {
+        default: '卡片',
+        type: String
+    },
+    head: {
+        default: true,
+        type: Boolean
+    },
+    width: {
+        default: '260',
+        type: String
     }
-};
+})
 </script>
 <style scoped>
 .box-card {

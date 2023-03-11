@@ -13,6 +13,7 @@ export const useConfigStore = defineStore('config', () => {
         author: '',
         authorStatus: '',
         notice: '',
+        link: '',
         avatar: '',
         viewCount: 0,
         articleCount: 0,

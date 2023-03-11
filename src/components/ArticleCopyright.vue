@@ -1,39 +1,36 @@
 <template>
     <div class="article-copyright">
         <div>
-            <people theme="filled" size="16" fill="#6163b6" style="vertical-align: -3px; margin-right: 4px;" />
+            <i-people theme="filled" size="16" fill="#6163b6" style="vertical-align: -3px; margin-right: 4px;" />
             <span>文章作者：</span>
-            <span>向日葵</span>
+            <span>{{ config.author }}</span>
         </div>
         <div>
-            <copy-link theme="filled" size="16" fill="#6163b6" style="vertical-align: -3px; margin-right: 4px;" />
+            <i-copy-link theme="filled" size="16" fill="#6163b6" style="vertical-align: -3px; margin-right: 4px;" />
             <span>文章链接：</span>
-            <span>http://127.0.0.1:5173/#/home</span>
+            <a :href="link">{{ link }}</a>
         </div>
         <div>
-            <copyright theme="filled" size="16" fill="#6163b6" style="vertical-align: -3px; margin-right: 4px;" />
+            <i-copyright theme="filled" size="16" fill="#6163b6" style="vertical-align: -3px; margin-right: 4px;" />
             <span>版权声明：</span>
-            <span>本博客所有文章除特别声明外，均采用 CC BY-NC-SA 4.0 许可协议。转载请注明来自 向日葵！</span>
+            <span>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA
+                    4.0</a> 许可协议。转载请注明来自 <a href="/">{{ config.author }}</a> ！</span>
         </div>
     </div>
 </template>
 
-<script>
-import { inject, onMounted, onUnmounted } from 'vue';
-import { People, CopyLink, Copyright } from '@icon-park/vue-next';
+<script setup>
+import { useConfigStore } from '../store';
+const { config } = useConfigStore()
 
-export default {
-    name: "ArticleCopyright",
-    components: {
-        People, CopyLink, Copyright
-    },
-    setup() {
-        return {
-        }
-    }
-};
+let link = window.location.href
+
 </script>
 <style scoped>
+a {
+    color: #000;
+}
+
 .article-copyright {
     height: 80px;
     padding: 20px;

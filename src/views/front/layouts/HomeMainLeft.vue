@@ -7,7 +7,7 @@
         <!-- 站点公告卡片 -->
         <HomeCard title="站点公告" width="300">
             <template v-slot:icon>
-                <speaker-one theme="filled" size="20" fill="#f4ca1c" style="vertical-align: -3px;" />
+                <i-speaker-one theme="filled" size="20" fill="#f4ca1c" style="vertical-align: -3px;" />
             </template>
             <template #default>
                 <div style="padding: 20px;">{{ config.notice }}</div>
@@ -20,35 +20,14 @@
     </div>
 </template>
 
-<script>
-import { reactive, toRefs, inject } from 'vue'
+<script setup>
 import HomeCard from '../../../components/HomeCard.vue';
-import { SpeakerOne, Tag } from '@icon-park/vue-next';
-import vueCountTo from '../../../components/VueCountTo/vue-countTo.vue';
 import HomeMainAuthor from '../contents/HomeMainAuthor.vue'
 import HomeMainCardCloud from '../contents/HomeMainTagCloud.vue'
 import { useConfigStore } from '../../../store';
-export default {
-    name: "HomeMainLeft",
-    components: {
-        vueCountTo,
-        HomeCard,
-        HomeMainAuthor,
-        HomeMainCardCloud,
-        SpeakerOne, Tag
-    },
-    setup(props) {
-        const state = reactive({
 
-        })
-        let { config } = useConfigStore()
-        return {
-            ...toRefs(state),
-            config
-        }
+let { config } = useConfigStore()
 
-    }
-};
 </script>
 <style scoped></style>
   

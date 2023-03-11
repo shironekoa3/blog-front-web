@@ -2,9 +2,7 @@
     <RouterView />
 </template>
 
-<script>
-export default {
-    name: "HomeMainRight"
-};
+<script setup>
+
 </script>
 <style scoped></style>

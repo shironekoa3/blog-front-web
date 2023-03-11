@@ -16,22 +16,11 @@
     </div>
   </template>
   
-<script>
+<script setup>
 import MgrTop from './layouts/MgrTop.vue';
 import MgrAside from './layouts/MgrAside.vue';
 import MgrContent from './layouts/MgrContent.vue';
 
-export default {
-    name: "mgrmain",
-    components: {
-      MgrTop, MgrAside, MgrContent
-    },
-    setup() {
-        return {
-
-        }
-    }
-};
 </script>
 
 <style scoped>

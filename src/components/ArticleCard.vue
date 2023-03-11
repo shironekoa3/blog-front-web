@@ -6,21 +6,21 @@
             <a class="title" style="cursor: pointer;" @click="router.push(article.link)">{{ article.title }}</a>
             <div class="info-box" style="margin: 10px 0;">
                 <div class="info-box-item">
-                    <calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
+                    <i-calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
                     <span>发表于{{ article.createTime }}</span>
                 </div>
                 <div class="info-box-item">
-                    <category-management theme="filled" size="18" fill="#fc625d"
+                    <i-category-management theme="filled" size="18" fill="#fc625d"
                         style="vertical-align: -3px; margin-right: 4px;" />
                     <span>{{ article.category.name }}</span>
                 </div>
                 <div class="info-box-item" v-if="article.tags.length > 0">
-                    <bookmark-one theme="filled" size="18" fill="#35cd4b"
+                    <i-bookmark-one theme="filled" size="18" fill="#35cd4b"
                         style="vertical-align: -3px; margin-right: 4px;" />
                     <span>{{ article.tags.map(item => item.name).join('·') }}</span>
                 </div>
                 <div class="info-box-item">
-                    <camera-one theme="filled" size="18" fill="#73aaff" style="vertical-align: -3px; margin-right: 4px;" />
+                    <i-camera-one theme="filled" size="18" fill="#73aaff" style="vertical-align: -3px; margin-right: 4px;" />
                     <span>{{ article.viewCount }}</span>
                 </div>
             </div>
@@ -29,46 +29,38 @@
             </div>
         </div>
         <div class="img-box" :style="{ backgroundImage: `url(${article.thumbnail})` }" v-if="article.thumbnail !== ''">
-            <!-- <img src="/images/54.webp" alt=""> -->
         </div>
     </div>
 </template>
 
-<script>
-import { Calendar, CategoryManagement, BookmarkOne, CameraOne } from '@icon-park/vue-next';
+<script setup>
+import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-export default {
-    name: "ArticleCard",
-    components: { Calendar, CategoryManagement, BookmarkOne, CameraOne },
-    props: {
-        article: {
-            default: {
-                id: 1,
-                link: '/article/1',
-                title: '默认文章标题',
-                summary: '默认文要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要~~',
-                createTime: '2023-01-01',
-                thumbnail: '/images/54.webp',
-                category: {
-                    id: 0,
-                    name: '默认分类'
-                },
-                tags: [
-                    { id: 0, name: '标签1' },
-                    { id: 0, name: '标签2' }
-                ],
-                viewCount: 999,
+defineProps({
+    article: {
+        default: {
+            id: 1,
+            link: '/article/1',
+            title: '默认文章标题',
+            summary: '默认文要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要默认文章摘要~~',
+            createTime: '2023-01-01',
+            thumbnail: '/images/54.webp',
+            category: {
+                id: 0,
+                name: '默认分类'
             },
-            type: Object
-        }
-    },
-    setup() {
-        let router = useRouter()
-        return {
-            router
-        }
+            tags: [
+                { id: 0, name: '标签1' },
+                { id: 0, name: '标签2' }
+            ],
+            viewCount: 999,
+        },
+        type: Object
     }
-};
+})
+
+let router = useRouter()
+
 </script>
 <style scoped>
 .article-card {

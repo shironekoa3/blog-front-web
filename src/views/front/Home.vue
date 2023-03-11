@@ -9,38 +9,18 @@
         </div>
     </main>
     <footer>
-        <div class="footer-box">2020-2023丨备案号</div>
-        <div class="footer-box">本站由 SpringBoot2 + Vue 3 开发</div>
-        <div class="footer-box">总访问量：9999 次丨作者：向日葵</div>
+        <div class="footer-box" v-for="(item, i) in config.footer.split('\n')" :id="i">{{ item }}</div>
     </footer>
 </template>
 
-<script>
-import { reactive, toRefs, provide, computed, onBeforeMount, watchEffect } from 'vue';
+<script setup>
 import { useConfigStore } from '../../store'
 import HomeMainLeft from './layouts/HomeMainLeft.vue';
 import HomeMainRight from './layouts/HomeMainRight.vue';
 import HomeTop from './layouts/HomeTop.vue';
 
-export default {
-    name: "home",
-    components: {
-        HomeTop,
-        HomeMainLeft,
-        HomeMainRight
-    },
-    setup() {
-        const state = reactive({
-        })
+let { config } = useConfigStore()
 
-        let { config } = useConfigStore()
-
-        return {
-            ...toRefs(state)
-        }
-
-    }
-};
 </script>
 <style scoped>
 main {

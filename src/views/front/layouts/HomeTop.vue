@@ -8,22 +8,22 @@
                 <p v-if="!config.currArticle.id">{{ config.description }}</p>
                 <div v-else class="info-box" style="margin: 10px 0;">
                     <div class="info-box-item">
-                        <calendar theme="filled" size="18" fill="#fdbc40"
+                        <i-calendar theme="filled" size="18" fill="#fdbc40"
                             style="vertical-align: -3px; margin-right: 4px;" />
-                        <span>发表于 {{ config.currArticle.createTime }}</span>
+                        <span>{{ config.currArticle.createTime }}</span>
                     </div>
                     <div class="info-box-item">
-                        <category-management theme="filled" size="18" fill="#fc625d"
+                        <i-category-management theme="filled" size="18" fill="#fc625d"
                             style="vertical-align: -3px; margin-right: 4px;" />
                         <span>{{ config.currArticle.category.name }}</span>
                     </div>
                     <div class="info-box-item" v-if="config.currArticle.tags.length > 0">
-                        <bookmark-one theme="filled" size="18" fill="#35cd4b"
+                        <i-bookmark-one theme="filled" size="18" fill="#35cd4b"
                             style="vertical-align: -3px; margin-right: 4px;" />
                         <span>{{ config.currArticle.tags.map(item => item.name).join('·') }}</span>
                     </div>
                     <div class="info-box-item">
-                        <camera-one theme="filled" size="18" fill="#73aaff"
+                        <i-camera-one theme="filled" size="18" fill="#73aaff"
                             style="vertical-align: -3px; margin-right: 4px;" />
                         <span>{{ config.currArticle.viewCount }}</span>
                     </div>
@@ -33,41 +33,26 @@
     </header>
 </template>
 
-<script>
-import { reactive, toRefs, watchEffect } from 'vue'
+<script setup>
+import { ref, watchEffect } from 'vue'
 import { useConfigStore } from '../../../store';
-import { Calendar, CategoryManagement, BookmarkOne, CameraOne } from '@icon-park/vue-next';
 import HomeTopNav from '../contents/HomeTopNav.vue'
-export default {
-    name: "HomeTop",
-    components: {
-        HomeTopNav,
-        Calendar, CategoryManagement, BookmarkOne, CameraOne
-    },
-    setup() {
-        const state = reactive({
-            headerImg: '',
-        })
 
-        let { config } = useConfigStore()
+let headerImg = ref('')
+
+let { config } = useConfigStore()
 
 
-        watchEffect(() => {
-            if (!config.isHeaderHidden) {
-                if (config.currArticle.id && config.currArticle.thumbnail) {
-                    state.headerImg = config.currArticle.thumbnail
-                } else {
-                    state.headerImg = config.headerImg
-                }
-            }
-        })
-
-        return {
-            ...toRefs(state),
-            config
+watchEffect(() => {
+    if (!config.isHeaderHidden) {
+        if (config.currArticle.id && config.currArticle.thumbnail) {
+            headerImg.value = config.currArticle.thumbnail
+        } else {
+            headerImg.value = config.headerImg
         }
     }
-};
+})
+
 </script>
 <style scoped>
 header {

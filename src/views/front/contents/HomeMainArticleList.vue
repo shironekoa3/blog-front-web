@@ -12,72 +12,57 @@
     </div>
 </template>
 
-<script>
-import { reactive, toRefs, inject } from 'vue';
+<script setup>
+import { ref, reactive, toRefs, inject } from 'vue';
 import ArticleCard from '../../../components/ArticleCard.vue';
 import { useConfigStore } from '../../../store';
 import { get, listHome } from '../../../api/article';
 import timeFormater from 'time-formater'
 import { useRouter } from 'vue-router';
-export default {
-    name: "HomeMainArticleList",
-    components: {
-        ArticleCard
-    },
-    setup() {
-        const state = reactive({
-            page: {
-                count: 0,
-                size: 5,
-                current: 1
-            },
-            isLoading: true
-        })
 
-        let { config } = useConfigStore()
-        let router = useRouter()
 
-        const refreshArticlePage = () => {
-            // 延迟500ms加载第二页
-            state.isLoading = true
+let page = reactive({
+    count: 0,
+    size: 5,
+    current: 1
+})
+let isLoading = ref(true)
 
-            setTimeout(() => {
-                // 获取文章数据
-                listHome({ p: state.page.current, size: state.page.size }).then(response => {
-                    if (response.status !== 200) {
-                        ElMessage.error('文章获取失败！')
-                    } else {
-                        state.page.count = response.data.pages
-                        config.articles = response.data.records.map(i => {
-                            i.createTime = timeFormater(i.createTime).format('YYYY-MM-DD')
-                            i.updateTime = timeFormater(i.updateTime).format('YYYY-MM-DD')
-                            i.link = `/article/${i.id}`
-                            return i
-                        })
-                        state.isLoading = false
+let { config } = useConfigStore()
+let router = useRouter()
 
-                        // 滚动
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-                    }
+const refreshArticlePage = () => {
+    // 延迟500ms加载第二页
+    isLoading.value = true
+
+    setTimeout(() => {
+        // 获取文章数据
+        listHome({ p: page.current, size: page.size }).then(response => {
+            if (response.status !== 200) {
+                ElMessage.error('文章获取失败！')
+            } else {
+                page.count = response.data.pages
+                config.articles = response.data.records.map(i => {
+                    i.createTime = timeFormater(i.createTime).format('YYYY-MM-DD')
+                    i.updateTime = timeFormater(i.updateTime).format('YYYY-MM-DD')
+                    i.link = `/article/${i.id}`
+                    return i
                 })
-            }, 500);
+                isLoading.value = false
 
-        }
+                // 滚动
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
+            }
+        })
+    }, 500);
 
-        refreshArticlePage()
-
-        return {
-            ...toRefs(state),
-            config,
-            refreshArticlePage
-        }
-
-    }
-};
+}
+refreshArticlePage()
 </script>
+
 <style>
 .article-list {
     min-height: 500px;

@@ -31,48 +31,31 @@
     </HomeCard>
 </template>
 
-<script>
-import { reactive, toRefs, inject } from 'vue'
+<script setup>
+import { ref, toRefs, inject } from 'vue'
 import HomeCard from '../../../components/HomeCard.vue';
 import vueCountTo from '../../../components/VueCountTo/vue-countTo.vue';
 import { useConfigStore } from '../../../store';
 import { useRouter } from 'vue-router';
-export default {
-    name: "HomeMainAuthor",
-    components: {
-        vueCountTo,
-        HomeCard
-    },
-    setup() {
-        const state = reactive({
-            count: 0
-        })
 
-        let { config } = useConfigStore()
+let count = ref(0)
+let { config } = useConfigStore()
+let router = useRouter()
 
-        let router = useRouter()
-
-        let timerId = 0
-        const avatarClick = () => {
-            clearTimeout(timerId)
-            state.count++
-            if (state.count >= 5) {
-                state.count = 0
-                router.push('/manager')
-            } else {
-                timerId = setTimeout(() => {
-                    state.count = 0
-                }, 2000)
-            }
-        }
-
-        return {
-            ...toRefs(state),
-            config,
-            avatarClick
-        }
+let timerId = 0
+const avatarClick = () => {
+    clearTimeout(timerId)
+    count.value++
+    if (count.value >= 5) {
+        count.value = 0
+        router.push('/manager')
+    } else {
+        timerId = setTimeout(() => {
+            count.value = 0
+        }, 2000)
     }
-};
+}
+
 </script>
 <style scoped>
 .author-card {

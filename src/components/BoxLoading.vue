@@ -4,28 +4,19 @@
     </div>
 </template>
 
-<script>
-import { reactive, toRefs, onMounted, watchEffect } from 'vue';
+<script setup>
+import { ref, watchEffect } from 'vue';
 
-export default {
-    name: "",
-    props: ['isLoading'],
-    setup(props) {
-        const state = reactive({
-            mask: null
-        })
-        watchEffect(() => {
-            if (props.isLoading && state.mask) {
-                state.mask.style.width = state.mask.parentNode.offsetWidth + 'px'
-                state.mask.style.height = state.mask.parentNode.offsetHeight + 'px'
-            }
-        })
+const props = defineProps(['isLoading'])
 
-        return {
-            ...toRefs(state),
-        }
+let mask = ref(null)
+watchEffect(() => {
+    if (mask.value && props.isLoading) {
+        mask.value.style.width = mask.value.parentNode.offsetWidth + 'px'
+        mask.value.style.height = mask.value.parentNode.offsetHeight + 'px'
     }
-};
+})
+
 </script>
 <style scoped>
 .mask {

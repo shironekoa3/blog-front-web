@@ -58,13 +58,15 @@ let page = reactive({
 })
 
 watchEffect(() => {
-    page.count = Math.ceil(props.commentList.length / page.size)
-    let start = (page.current - 1) * page.size
-    commentListPage = props.commentList.slice(start, start + page.size)
+    if (props.commentList) {
+        page.count = Math.ceil(props.commentList.length / page.size)
+        let start = (page.current - 1) * page.size
+        commentListPage = props.commentList.slice(start, start + page.size)
+    }
 })
 
 
-let contentPlaceHolder = '只是一直在等你而已，才不是想被评论呢～'
+let contentPlaceHolder = '昵称填写 QQ 账号可以自动识别信息哦~'
 let formInfo = reactive({
     avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     nick: '',
