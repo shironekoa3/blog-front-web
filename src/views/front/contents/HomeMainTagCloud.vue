@@ -6,7 +6,7 @@
         <template #default>
             <div class="tag-cloud">
                 <ul>
-                    <li v-for="(tag, i) in config.tags" :id="i">
+                    <li v-for="(tag, i) in config.tags.splice(0, 15)" :id="i">
                         <a href="#" class="tag-cloud-item" v-text="tag.name"
                             :style="{ backgroundColor: getRandomColor() }"></a>
                     </li>
@@ -33,7 +33,8 @@ list().then(response => {
 })
 
 const getRandomColor = () => {
-    let colorList = ['#fdc400', '#e66c70', '#f8ba3c', '#ea5455', '#00eaff', '#ed71b4', '#45c17a', '#ef93fa', '#ff52e5', '#fd999d']
+    // let colorList = ['#fdc400', '#e66c70', '#f8ba3c', '#ea5455', '#00eaff', '#ed71b4', '#45c17a', '#ef93fa', '#ff52e5', '#fd999d']
+    let colorList = ['#96514d', '#deb068', '#f09199', '#494a41', '#44617b', '#a86965']
     return colorList[Math.floor(Math.random() * colorList.length)]
 }
 
