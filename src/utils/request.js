@@ -5,7 +5,7 @@ import axios from 'axios'
 
 
 axios.defaults.baseURL = '/api'
-// axios.defaults.timeout = 10000
+axios.defaults.timeout = 10000
 axios.defaults.withCredentials = true
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
@@ -15,7 +15,7 @@ axios.interceptors.request.use(config => {
     if (token) {
         config.headers.token = token;
     }
-    return config
+    return new Promise(resolve => setTimeout(() => resolve(config), 500));
 }, error => {
     return Promise.reject(error);
 })

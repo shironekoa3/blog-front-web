@@ -93,7 +93,6 @@ const openDialog = (row) => {
 // 添加 & 修改
 const handleChange = () => {
     change(state.optionItem).then(resp => {
-        console.log(resp);
         if (resp.code === 200) {
             ElMessage.success('操作成功！')
         } else {
@@ -120,7 +119,6 @@ const handleDelete = (row) => {
             ElMessage.error('存在关联文章，请先在文章里删除引用。')
         } else {
             del(row.id).then(resp => {
-                console.log(result);
                 if (resp.code === 200) {
                     ElMessage.success('操作成功！')
                 } else {

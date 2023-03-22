@@ -17,6 +17,9 @@ export const useConfigStore = defineStore('config', () => {
         avatar: '',
         viewCount: 0,
         articleCount: 0,
+        tagCount: 0,
+        categoryCount: 0,
+        articleCount: 0,
         nav: {},
         footer: '',
         isShowDescription: true,
@@ -52,9 +55,11 @@ export const useConfigStore = defineStore('config', () => {
 
             // 将后台传入的文本数据转换成对应的类型
             config.isHeaderHidden = config.isHeaderHidden !== 'false'
-            config.articleCount = Number(config.articleCount)
-            config.nav = JSON.parse(config.nav)
             config.viewCount = Number(config.viewCount)
+            config.articleCount = Number(config.articleCount)
+            config.categoryCount = Number(config.categoryCount)
+            config.tagCount = Number(config.tagCount)
+            config.nav = JSON.parse(config.nav)
         }
         // console.log('数据获取完成！', config);
     })

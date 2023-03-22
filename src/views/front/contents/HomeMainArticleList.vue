@@ -32,27 +32,25 @@ const refreshArticlePage = () => {
     // 延迟500ms加载第二页
     isLoading.value = true
 
-    setTimeout(() => {
-        // 获取文章数据
-        listHome({ p: page.current, size: page.size }).then(response => {
-            if (response.code !== 200) {
-                ElMessage.error(response.msg)
-            } else {
-                page.count = response.data.pages
-                config.articles = response.data.records.map(i => {
-                    i.link = `/article/${i.id}`
-                    return i
-                })
-                isLoading.value = false
+    // 获取文章数据
+    listHome({ p: page.current, size: page.size }).then(response => {
+        if (response.code !== 200) {
+            ElMessage.error(response.msg)
+        } else {
+            page.count = response.data.pages
+            config.articles = response.data.records.map(i => {
+                i.link = `/article/${i.id}`
+                return i
+            })
+            isLoading.value = false
 
-                // 滚动
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                })
-            }
-        })
-    }, 500);
+            // 滚动
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
+        }
+    })
 }
 refreshArticlePage()
 </script>
