@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model="activeName" type="border-card">
+    <el-tabs v-model="state.activeName" type="border-card">
         <el-tab-pane name="User" label="博客配置">
             <el-form label-position="right" label-width="90" style="max-width: 600px;">
                 <el-form-item label="博客标题：">
@@ -46,7 +46,7 @@
         <el-tab-pane name="Config" label="导航配置">
             <el-form label-position="right" label-width="90" style="max-width: 600px;">
                 <el-form-item label="导航信息：">
-                    <el-input v-model="navYaml" type="textarea" placeholder="使用 YAML 语法配置首页导航链接信息" rows="14" />
+                    <el-input v-model="state.navYaml" type="textarea" placeholder="使用 YAML 语法配置首页导航链接信息" rows="14" />
                 </el-form-item>
                 <el-form-item label="" style="margin: 20px 0;">
                     <el-button type="primary" @click="saveOption">保存</el-button>
@@ -76,76 +76,65 @@
     </el-tabs>
 </template>
 
-<script>
-import { reactive, toRefs, watchEffect } from 'vue';
+<script setup>
+import { reactive, watchEffect } from 'vue';
 import { useConfigStore } from '../../../store';
 import yaml from 'js-yaml'
 import { ElMessage } from 'element-plus';
 import { change } from '../../../api/option';
-export default {
-    name: "Setting",
-    setup() {
-        const state = reactive({
-            activeName: 'User',
-            navYaml: ''
-        })
 
-        const yaml2Json = (ymlText) => {
-            try {
-                return yaml.load(ymlText);
-            } catch (error) {
-                return {}
-            }
-        }
-        const json2Yaml = (jsonText) => {
-            try {
-                return yaml.dump(jsonText);
-            } catch (error) {
-                return ""
-            }
-        }
+const state = reactive({
+    activeName: 'User',
+    navYaml: ''
+})
 
-        let { config } = useConfigStore()
-
-        watchEffect(() => {
-            state.navYaml = json2Yaml(config.nav)
-        })
-
-        const saveOption = () => {
-            let tempNav = JSON.stringify(yaml2Json(state.navYaml))
-            if (tempNav == '{}') {
-                ElMessage.error('请检查导航语法是否有误！')
-                return
-            }
-            let tempConfig = [
-                { key: 'title', value: config.title },
-                { key: 'description', value: config.description },
-                { key: 'headerImg', value: config.headerImg },
-                { key: 'isHeaderHidden', value: config.isHeaderHidden ? 'true' : 'false' },
-                { key: 'author', value: config.author },
-                { key: 'authorStatus', value: config.authorStatus },
-                { key: 'avatar', value: config.avatar },
-                { key: 'notice', value: config.notice },
-                { key: 'nav', value: tempNav },
-                { key: 'footer', value: config.footer }
-            ]
-            change(tempConfig).then(response => {
-                if (response.data) {
-                    ElMessage.success('操作成功！')
-                } else {
-                    ElMessage.error('操作失败！')
-                }
-            })
-        }
-
-        return {
-            config,
-            ...toRefs(state),
-            yaml2Json,
-            saveOption
-        }
+const yaml2Json = (ymlText) => {
+    try {
+        return yaml.load(ymlText);
+    } catch (error) {
+        return {}
     }
-};
+}
+const json2Yaml = (jsonText) => {
+    try {
+        return yaml.dump(jsonText);
+    } catch (error) {
+        return ""
+    }
+}
+
+let { config } = useConfigStore()
+
+watchEffect(() => {
+    state.navYaml = json2Yaml(config.nav)
+})
+
+const saveOption = () => {
+    let tempNav = JSON.stringify(yaml2Json(state.navYaml))
+    if (tempNav == '{}') {
+        ElMessage.error('请检查导航语法是否有误！')
+        return
+    }
+    let tempConfig = [
+        { key: 'title', value: config.title },
+        { key: 'description', value: config.description },
+        { key: 'headerImg', value: config.headerImg },
+        { key: 'isHeaderHidden', value: config.isHeaderHidden ? 'true' : 'false' },
+        { key: 'author', value: config.author },
+        { key: 'authorStatus', value: config.authorStatus },
+        { key: 'avatar', value: config.avatar },
+        { key: 'notice', value: config.notice },
+        { key: 'nav', value: tempNav },
+        { key: 'footer', value: config.footer }
+    ]
+    change(tempConfig).then(resp => {
+        if (resp.code === 200) {
+            ElMessage.success('操作成功！')
+        } else {
+            ElMessage.error(resp.msg)
+        }
+    })
+}
 </script>
 
 <style scoped></style>

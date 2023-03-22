@@ -16,7 +16,6 @@
     "js-yaml": "^4.1.0",
     "md-editor-v3": "^2.8.1",
     "pinia": "^2.0.32",
-    "time-formater": "^1.1.3",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
     "yaml": "^2.2.1"

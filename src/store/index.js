@@ -43,8 +43,8 @@ export const useConfigStore = defineStore('config', () => {
 
     // 获取网站配置
     listOption().then(response => {
-        if (response.status !== 200) {
-            ElMessage.error('获取失败，网络错误！')
+        if (response.code !== 200) {
+            ElMessage.error(response.msg)
         } else {
             rawConfig = response.data
             rawConfig.map(i => { return { [i.key]: i.value } })

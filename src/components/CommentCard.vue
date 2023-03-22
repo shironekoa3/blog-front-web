@@ -85,7 +85,9 @@ const nickToQQ = () => {
         // 判断是否纯数字
         if (/^\d+$/.test(formInfo.nick)) {
             getQQInfo(formInfo.nick).then(response => {
-                if (response.data.code === '200') {
+                if (response.code !== 200) {
+                    ElMessage.error(response.msg)
+                } else if (response.data.code === '200') {
                     formInfo.avatar = response.data.data.avatar
                     formInfo.nick = response.data.data.name
                     formInfo.email = response.data.data.qq + '@qq.com'

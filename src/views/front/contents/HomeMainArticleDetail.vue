@@ -1,10 +1,11 @@
 <template>
-    <BoxLoading :isLoading="isLoading" />
-    <ArticleDetail :article="config.currArticle" />
-    <div style="margin-top: 20px;"></div>
-    <ArticleCopyright />
-    <div style="margin-top: 20px;"></div>
-    <CommentCard :commentList="commentList" @onSendComment="onSendComment" />
+    <div v-box-loading="isLoading" style="min-height: 300px;">
+        <ArticleDetail :article="config.currArticle" />
+        <div style="margin-top: 20px;"></div>
+        <ArticleCopyright />
+        <div style="margin-top: 20px;"></div>
+        <CommentCard :commentList="commentList" @onSendComment="onSendComment" />
+    </div>
 </template>
 
 <script setup>
@@ -17,7 +18,6 @@ import { get as getArticle } from '../../../api/article';
 import { getByArticleId, save as saveComment } from '../../../api/comment';
 import CommentCard from '../../../components/CommentCard.vue';
 import { ElMessage } from 'element-plus';
-import timeFormater from 'time-formater'
 
 let isLoading = ref(true)
 let commentList = reactive([])
@@ -28,11 +28,9 @@ let { config } = useConfigStore()
 let id = useRoute().params.id
 if (id > 0) {
     getArticle(id).then(response => {
-        if (response.status !== 200) {
-            ElMessage.error('文章获取失败！')
+        if (response.code !== 200) {
+            ElMessage.error(response.msg)
         } else {
-            response.data.createTime = timeFormater(response.data.createTime).format('YYYY-MM-DD HH:mm:ss')
-            response.data.updateTime = timeFormater(response.data.updateTime).format('YYYY-MM-DD HH:mm:ss')
             config.currArticle = response.data
             isLoading.value = false
             window.scrollTo({
@@ -46,14 +44,10 @@ if (id > 0) {
 // 加载评论
 const refreshComment = () => {
     getByArticleId(id).then(response => {
-        if (response.status !== 200) {
-            ElMessage.error('评论获取失败！')
+        if (response.code !== 200) {
+            ElMessage.error(response.msg)
         } else {
             commentList = response.data
-            commentList.forEach(item => {
-                item.createTime = timeFormater(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                item.updateTime = timeFormater(item.updateTime).format('YYYY-MM-DD HH:mm:ss')
-            })
         }
     })
 }

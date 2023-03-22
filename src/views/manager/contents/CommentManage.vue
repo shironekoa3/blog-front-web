@@ -1,15 +1,15 @@
 <template>
     <div class="menu" style="margin-bottom: 20px;">
         <el-button-group>
-            <el-button type="primary" @click='handleRefreshList' :loading="isLoading">刷新列表</el-button>
+            <el-button type="primary" @click='handleRefreshList' :loading="state.isLoading">刷新列表</el-button>
         </el-button-group>
     </div>
 
     <!-- 列表表格 -->
-    <el-table v-loading="isLoading" :data="tableData" stripe border style=" max-height: calc(100vh - 212px);">
+    <el-table v-loading="state.isLoading" :data="state.tableData" stripe border style="max-height: calc(100vh - 212px);">
         <el-table-column label="编号" width="100" align="center">
             <template #default="scope">
-                {{ scope.$index + 1 + (page.current - 1) * page.size }}
+                {{ scope.$index + 1 + (state.page.current - 1) * state.page.size }}
             </template>
         </el-table-column>
         <el-table-column prop="articleTitle" label="文章" min-width="220" />
@@ -29,80 +29,69 @@
 
     <!-- 分页结构 -->
     <div style="height: 60px;">
-        <el-pagination layout="prev, pager, next" :page-size="page.size" :page-count="page.count"
-            v-model:current-page="page.current" style="padding-top: 14px;" />
+        <el-pagination layout="prev, pager, next" :page-size="state.page.size" :page-count="state.page.count"
+            v-model:current-page="state.page.current" style="padding-top: 14px;" />
     </div>
 </template>
   
-<script>
-import { ref, reactive, toRefs, onMounted, watchEffect } from 'vue'
+<script setup>
+import { reactive, watchEffect } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { list, del } from '../../../api/comment'
-import timeFormater from 'time-formater'
-export default {
-    name: "CommentManage",
-    setup() {
-        let state = reactive({
-            rawData: [],
-            tableData: [],
-            isLoading: false,
-            page: {
-                size: 10,
-                current: 1,
-                count: 0,
-            }
-        })
 
-        // 删除
-        const handleDelete = (row) => {
-            ElMessageBox.confirm('确定要删除吗？', '警告', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }).then(async () => {
-                let result = await del(row.id)
-                if (result.data) {
-                    ElMessage.success('操作成功！')
-                } else {
-                    ElMessage.error('操作失败，网络错误！')
-                }
-                handleRefreshList()
-            }).catch(() => {
-                // 取消
-            })
-        }
 
-        // 刷新
-        const handleRefreshList = async () => {
-            state.isLoading = true
-            let result = await list();
-            if (result.status !== 200) {
-                ElMessage.error('获取失败，网络错误！')
-            } else {
-                state.rawData = result.data
-                state.rawData.forEach(item => {
-                    item.createTime = timeFormater(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                    item.updateTime = timeFormater(item.updateTime).format('YYYY-MM-DD HH:mm:ss')
-                })
-                state.page.count = Math.ceil(state.rawData.length / state.page.size)
-            }
-            state.isLoading = false;
-        }
-
-        watchEffect(() => {
-            let start = (state.page.current - 1) * state.page.size
-            state.tableData = state.rawData.slice(start, start + state.page.size)
-        })
-
-        handleRefreshList()
-
-        return {
-            ...toRefs(state),
-            handleDelete,
-            handleRefreshList
-        }
+let state = reactive({
+    rawData: [],
+    tableData: [],
+    isLoading: false,
+    page: {
+        size: 10,
+        current: 1,
+        count: 0,
     }
-};
+})
+
+// 删除
+const handleDelete = (row) => {
+    ElMessageBox.confirm('确定要删除吗？', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    }).then(async () => {
+        del(row.id).then(resp => {
+            if (resp.code === 200) {
+                ElMessage.success('操作成功！')
+            } else {
+                ElMessage.error(resp.ElMessage)
+            }
+            handleRefreshList()
+        })
+    }).catch(() => {
+        // 取消
+    })
+}
+
+// 刷新
+const handleRefreshList = () => {
+    state.isLoading = true
+    list().then(resp => {
+        if (resp.code !== 200) {
+            ElMessage.error(resp.msg)
+        } else {
+            state.rawData = resp.data
+            state.page.count = Math.ceil(state.rawData.length / state.page.size)
+        }
+        state.isLoading = false;
+    })
+}
+
+watchEffect(() => {
+    let start = (state.page.current - 1) * state.page.size
+    state.tableData = state.rawData.slice(start, start + state.page.size)
+})
+
+handleRefreshList()
+
 </script>
 
 <style scoped></style>

@@ -25,8 +25,8 @@ const { config } = useConfigStore()
 
 // 获取标签数据
 list().then(response => {
-    if (response.status !== 200) {
-        ElMessage.error('标签获取失败！')
+    if (response.code !== 200) {
+        ElMessage.error(response.msg)
     } else {
         config.tags = response.data
     }

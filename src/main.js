@@ -11,7 +11,8 @@ import './style.css'
 import * as IconPark from '@icon-park/vue-next'
 import '@icon-park/vue-next/styles/index.css'
 
-import BoxLoading from './components/BoxLoading.vue'
+import BoxLoadingDirective from './directive/loadingDirective'
+import './directive/loadingDirective/index.css'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -21,13 +22,13 @@ for (const [key, component] of Object.entries(IconPark)) {
     app.component('I' + key, component)
 }
 
-app.component('BoxLoading', BoxLoading)
-
 app.use(ElementPlus)
 
 app.use(router)
 
 app.use(pinia)
+
+app.directive('box-loading', BoxLoadingDirective)
 
 app.mount('#app')
 

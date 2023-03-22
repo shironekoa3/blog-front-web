@@ -1,6 +1,5 @@
 <template>
-    <div class="article-list">
-        <BoxLoading :isLoading="isLoading" />
+    <div class="article-list" v-box-loading="isLoading">
         <div class="article-item" v-for="(article, i) in config.articles" :id="i" style="margin-bottom: 20px;">
             <ArticleCard :article="article" />
         </div>
@@ -13,13 +12,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, inject } from 'vue';
+import { ref, reactive } from 'vue';
 import ArticleCard from '../../../components/ArticleCard.vue';
 import { useConfigStore } from '../../../store';
-import { get, listHome } from '../../../api/article';
-import timeFormater from 'time-formater'
+import { listHome } from '../../../api/article';
 import { useRouter } from 'vue-router';
-
 
 let page = reactive({
     count: 0,
@@ -38,13 +35,11 @@ const refreshArticlePage = () => {
     setTimeout(() => {
         // 获取文章数据
         listHome({ p: page.current, size: page.size }).then(response => {
-            if (response.status !== 200) {
-                ElMessage.error('文章获取失败！')
+            if (response.code !== 200) {
+                ElMessage.error(response.msg)
             } else {
                 page.count = response.data.pages
                 config.articles = response.data.records.map(i => {
-                    i.createTime = timeFormater(i.createTime).format('YYYY-MM-DD')
-                    i.updateTime = timeFormater(i.updateTime).format('YYYY-MM-DD')
                     i.link = `/article/${i.id}`
                     return i
                 })
@@ -58,7 +53,6 @@ const refreshArticlePage = () => {
             }
         })
     }, 500);
-
 }
 refreshArticlePage()
 </script>
