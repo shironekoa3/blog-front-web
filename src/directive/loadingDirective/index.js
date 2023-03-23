@@ -14,6 +14,10 @@ const loadingDirective = {
     updated(el, binding) {
         const isLoading = binding.value;
         if (isLoading) {
+            // 防止多次挂载
+            if (el.querySelector('.box-loading-mask')) {
+                return
+            }
             el.style.position = 'relative';
             const boxMask = document.createElement('div');
             boxMask.className = 'box-loading-mask';

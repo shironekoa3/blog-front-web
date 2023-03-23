@@ -17,10 +17,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { get as getArticle } from '../../../api/article';
 import { getByArticleId, save as saveComment } from '../../../api/comment';
 import CommentCard from '../../../components/CommentCard.vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
+
 
 let isLoading = ref(true)
-let commentList = reactive([])
+let commentList = ref([])
+
 
 let { config } = useConfigStore()
 
@@ -47,7 +49,7 @@ const refreshComment = () => {
         if (response.code !== 200) {
             ElMessage.error(response.msg)
         } else {
-            commentList = response.data
+            commentList.value = response.data
         }
     })
 }
@@ -56,10 +58,14 @@ refreshComment()
 const onSendComment = (comment) => {
     comment.articleId = config.currArticle.id
     saveComment(comment).then(response => {
-        if (response.status !== 200) {
-            ElMessage.error('评论失败！')
+        if (response.code !== 200) {
+            ElMessage.error(response.msg)
         } else {
-            ElMessage.success('评论成功！')
+            ElNotification({
+                title: 'Success',
+                message: '评论成功！',
+                type: 'success',
+            })
             refreshComment()
         }
     })
