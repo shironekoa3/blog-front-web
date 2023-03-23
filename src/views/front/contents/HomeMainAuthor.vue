@@ -61,7 +61,7 @@ const avatarClick = () => {
 .author-card {
     width: 300px;
     height: auto;
-    background-image: url(/images/aside_author_image.jpg);
+    background-image: url(/images/global/aside_author_image.jpg);
     background-size: cover;
     background-size: 100% 120px;
     background-repeat: no-repeat;
