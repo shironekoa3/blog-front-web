@@ -37,7 +37,7 @@
         <div class="comment-card-content">
             <el-input class="textarea" v-model="formInfo.content" rows="8" resize='none' type="textarea"
                 :placeholder="contentPlaceHolder"
-                input-style="border-radius: 6px; background:#fff url(/images/comment.png) right 10px bottom 60px no-repeat; font-size: 16px" />
+                input-style="border-radius: 6px; background:#fff url(/images/global/comment.png) right 10px bottom 60px no-repeat; font-size: 16px" />
             <el-button class="submit" type="primary" @click="sendComment">发送评论</el-button>
         </div>
     </div>

@@ -45,8 +45,8 @@ import { login } from '../api/user';
 import router from '../router';
 
 let userData = reactive({
-    username: 'shironekoa3',
-    password: '123456',
+    username: '',
+    password: '',
     isRemember: false
 })
 
