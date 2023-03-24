@@ -14,6 +14,8 @@ import '@icon-park/vue-next/styles/index.css'
 import BoxLoadingDirective from './directive/loadingDirective'
 import './directive/loadingDirective/index.css'
 
+
+
 const app = createApp(App)
 const pinia = createPinia()
 
