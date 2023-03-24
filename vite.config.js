@@ -7,7 +7,7 @@ export default defineConfig(({ mode, command }) => {
   const { VITE_APP_ENV } = env
   console.log(VITE_APP_ENV);
   return {
-    base: VITE_APP_ENV === 'production' ? './' : './',
+    base: VITE_APP_ENV === 'production' ? '/' : './',
     plugins: [vue()],
     server: {
       proxy: {
