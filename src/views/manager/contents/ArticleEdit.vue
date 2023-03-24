@@ -32,7 +32,7 @@
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button @click="state.dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="submitArticle">发表文章</el-button>
             </span>
         </template>

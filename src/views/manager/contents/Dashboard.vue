@@ -190,8 +190,6 @@ listLogininfor().then(resp => {
     }
 })
 
-console.log(config);
-
 onMounted(() => {
     // 添加窗口监视
     window.addEventListener('resize', refreshChart)

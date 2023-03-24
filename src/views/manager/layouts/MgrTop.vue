@@ -28,11 +28,15 @@ import { ElMessage } from 'element-plus';
 let { config } = useConfigStore()
 
 function userLogout() {
-    logout.then(resp => {
+    logout().then(resp => {
         if (resp.code !== 200) {
             ElMessage.error(resp.msg)
         } else {
             ElMessage.success('退出登录成功！')
+            const token = localStorage.getItem('token');
+            if (token) {
+                localStorage.removeItem('token')
+            }
             setTimeout(() => {
                 window.location.href = '/'
             }, 1200);
