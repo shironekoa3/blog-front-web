@@ -36,7 +36,6 @@ a {
     padding: 20px;
     border-radius: 6px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
     background-color: #ffffff;
     overflow: hidden;
     transition: 0.3s;

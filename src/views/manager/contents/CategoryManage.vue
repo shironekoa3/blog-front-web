@@ -92,20 +92,24 @@ const openDialog = (row) => {
 
 // 添加 & 修改
 const handleChange = () => {
-    change(state.optionItem).then(resp => {
-        if (resp.code === 200) {
-            ElMessage.success('操作成功！')
-        } else {
-            ElMessage.error(resp.msg)
-        }
-        state.dialogVisible = false
-        handleRefreshList()
-    }).catch(err => {
-        console.log(err);
-        ElMessage.error(err.msg)
-        state.dialogVisible = false
-        handleRefreshList()
-    })
+    if (state.optionItem.name === '') {
+        ElMessage.warning('名称不能为空！')
+    } else {
+        change(state.optionItem).then(resp => {
+            if (resp.code === 200) {
+                ElMessage.success('操作成功！')
+            } else {
+                ElMessage.error(resp.msg)
+            }
+            state.dialogVisible = false
+            handleRefreshList()
+        }).catch(err => {
+            console.log(err);
+            ElMessage.error(err.msg)
+            state.dialogVisible = false
+            handleRefreshList()
+        })
+    }
 }
 
 // 删除

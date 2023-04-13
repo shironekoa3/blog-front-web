@@ -4,7 +4,7 @@
             <span class="article-top" v-if="article.isTop">置顶</span>
             <!-- <RouterLink :to="article.link" class="title">{{ article.title }}</RouterLink> -->
             <a class="title" style="cursor: pointer;" @click="router.push(article.link)">{{ article.title }}</a>
-            <div class="info-box" style="margin: 10px 0;">
+            <div class="info-box">
                 <div class="info-box-item">
                     <i-calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
                     <span>发表于{{ article.createTime }}</span>
@@ -69,14 +69,15 @@ let router = useRouter()
     overflow: hidden;
     transition: 0.3s;
     color: #303133;
-    padding: 40px 40px 60px;
+    padding: 35px 40px 50px;
     position: relative;
     max-height: 148px;
 }
 
 .title {
     color: #303133;
-    font-size: 28px;
+    font-size: 26px;
+    letter-spacing: 2px;
     font-weight: 400;
     cursor: pointer;
     transition: 0.3s;
@@ -102,6 +103,7 @@ let router = useRouter()
 .info-box {
     display: flex;
     flex-wrap: wrap;
+    margin: 12px 0;
 }
 
 .info-box-item {
@@ -122,9 +124,8 @@ let router = useRouter()
     -webkit-line-clamp: 3;
     overflow: hidden;
     letter-spacing: 1px;
-    font-weight: 100;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
-
+    /* font-weight: 100; */
+    /* text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); */
 }
 
 .img-box {

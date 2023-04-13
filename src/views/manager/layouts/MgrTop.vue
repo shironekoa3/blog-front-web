@@ -58,7 +58,7 @@ function userLogout() {
     color: white;
     float: left;
     padding-left: 20px;
-    font-weight: 100;
+    font-weight: 700;
 }
 
 

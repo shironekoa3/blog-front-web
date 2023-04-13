@@ -46,11 +46,10 @@ footer {
 }
 
 .footer-box {
-    font-size: 14px;
-    font-weight: 100;
+    font-size: 16px;
     letter-spacing: 1px;
     color: #606266;
     margin-bottom: 5px;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    /* text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); */
 }
 </style>

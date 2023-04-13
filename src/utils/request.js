@@ -15,7 +15,7 @@ axios.interceptors.request.use(config => {
     if (token) {
         config.headers.token = token;
     }
-    return new Promise(resolve => setTimeout(() => resolve(config), 500));
+    return new Promise(resolve => setTimeout(() => resolve(config), 300));
 }, error => {
     return Promise.reject(error);
 })

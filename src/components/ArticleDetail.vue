@@ -66,7 +66,8 @@ nav {
 nav a,
 nav span {
     color: #606266;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    letter-spacing: 1px;
+    /* text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); */
     transition: color 0.3s;
 }
 
