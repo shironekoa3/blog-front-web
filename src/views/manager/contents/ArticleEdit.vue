@@ -1,13 +1,13 @@
 <template>
     <div class="menu">
-        <el-input class="title" v-model="state.article.title" placeholder="在此输入标题..." />
-        <el-button class="submit" type="primary" @click='nextStep'>发表</el-button>
+        <el-input class="title" v-model="state.article.title" size="large" placeholder="在此输入标题..." />
+        <el-button class="submit" type="primary" size="large" @click='nextStep'>发表</el-button>
     </div>
     <MdEditor v-model="state.article.content" class="md" />
 
     <!-- 编写完毕之后弹出对话框编辑文章信息 -->
     <el-dialog v-model="state.dialogVisible" title="还差一步！" width="500" style="padding: 0 20px;">
-        <el-form label-position="right" label-width="auto" style="max-width: 460px;">
+        <el-form size="large" label-position="right" label-width="auto" style="max-width: 460px;">
             <el-form-item label="文章分类：">
                 <el-input v-model="state.article.category.name" placeholder="填写文章分类（必填）" />
             </el-form-item>
@@ -20,20 +20,20 @@
             <el-form-item label="文章简介：">
                 <el-input v-model="state.article.summary" type="textarea" rows="5" placeholder="留空则自动提取文章前面部分文字" />
             </el-form-item>
-            <el-form-item label="置顶：" style="text-align: right;">
-                <el-switch v-model="state.article.isTopShow" />
-                <el-form-item label="评论：" style="text-align: right;">
-                    <el-switch v-model="state.article.isCommentShow" />
+            <el-form-item label="评论：" style="text-align: right;">
+                <el-switch v-model="state.article.isComment" />
+                <el-form-item label="置顶：" style="text-align: right;">
+                    <el-switch v-model="state.article.isTop" />
                 </el-form-item>
                 <el-form-item label="隐藏：" style="text-align: right;">
-                    <el-switch v-model="state.article.statusShow" />
+                    <el-switch v-model="state.article.status" />
                 </el-form-item>
             </el-form-item>
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="state.dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="submitArticle">发表文章</el-button>
+                <el-button size="large" @click="state.dialogVisible = false">取消</el-button>
+                <el-button size="large" type="primary" @click="submitArticle">发表文章</el-button>
             </span>
         </template>
     </el-dialog>
@@ -77,7 +77,6 @@ if (state.article.id > 0) {
             ElMessage.error(resp.msg)
         } else {
             state.article = resp.data
-            console.log(state.article);
             state.tagText = resp.data.tags.map(i => i.name).join(', ')
 
             // 删除时间信息，使用后台自动添加的时间

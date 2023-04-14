@@ -23,27 +23,34 @@
 <script setup>
 import { useConfigStore } from '../../../store';
 import { logout } from '../../../api/user'
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 let { config } = useConfigStore()
 
 function userLogout() {
-    logout().then(resp => {
-        if (resp.code !== 200) {
-            ElMessage.error(resp.msg)
-        } else {
-            ElMessage.success('退出登录成功！')
-            const token = localStorage.getItem('token');
-            if (token) {
-                localStorage.removeItem('token')
+    ElMessageBox.confirm('确定要退出登陆吗？', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    }).then(() => {
+        logout().then(resp => {
+            if (resp.code !== 200) {
+                ElMessage.error(resp.msg)
+            } else {
+                ElMessage.success('退出登录成功！')
+                const token = localStorage.getItem('token');
+                if (token) {
+                    localStorage.removeItem('token')
+                }
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 1200);
             }
-            setTimeout(() => {
-                window.location.href = '/'
-            }, 1200);
-        }
+        })
+    }).catch(() => {
+        // 取消
     })
 }
-
 </script>
 
 <style scoped>

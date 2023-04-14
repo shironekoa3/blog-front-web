@@ -4,7 +4,8 @@
         <div style="margin-top: 20px;"></div>
         <ArticleCopyright />
         <div style="margin-top: 20px;"></div>
-        <CommentCard :commentList="commentList" @onSendComment="onSendComment" />
+        <div class="comment-tip">—— 评论区{{ allowComment ? '' : '已关闭' }} ——</div>
+        <CommentCard v-if="allowComment" :commentList="commentList" @onSendComment="onSendComment" />
     </div>
 </template>
 
@@ -21,6 +22,7 @@ import { ElMessage, ElNotification } from 'element-plus';
 
 
 let isLoading = ref(true)
+let allowComment = ref(false)
 let commentList = ref([])
 
 
@@ -34,6 +36,7 @@ if (id > 0) {
             ElMessage.error(response.msg)
         } else {
             config.currArticle = response.data
+            allowComment.value = config.currArticle.isComment
             isLoading.value = false
             window.scrollTo({
                 top: 0,
@@ -93,5 +96,17 @@ onUnmounted(() => {
 })
 
 </script>
-<style scoped></style>
+<style scoped>
+.comment-tip {
+    border-radius: 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+    background-color: #ffffff;
+    overflow: hidden;
+    color: #303133;
+    padding: 20px;
+    font-size: 24px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+</style>
   

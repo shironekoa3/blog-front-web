@@ -29,6 +29,7 @@ let link = window.location.href
 <style scoped>
 a {
     color: #000;
+    text-decoration: underline;
 }
 
 .article-copyright {

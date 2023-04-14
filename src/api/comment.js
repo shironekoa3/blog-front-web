@@ -6,8 +6,8 @@ export function getByArticleId(articleId) {
 export function getQQInfo(qq) {
     return request.get(`/comment/getQQInfo/${qq}`)
 }
-export function list() {
-    return request.get('/comment/list');
+export function list(param) {
+    return request.get(`/comment/list?searchKey=${param?.searchKey || ''}`);
 }
 export function save(params) {
     return request.post('/comment/save', params);

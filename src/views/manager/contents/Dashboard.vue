@@ -173,6 +173,8 @@ listCategory().then(resp => {
         option.yAxis.data = tempData.map(i => i.name)
         option.series[0].data = tempData.map(i => i.articleCount)
         state.isChartLoading = false
+        console.log(option.yAxis.data);
+        console.log(option.series[0].data);
         initChart();
     }
 })
@@ -285,13 +287,14 @@ section {
 .summary-card .title {
     padding: 10px;
     padding-left: 20px;
+    padding-top: 14px;
     border-bottom: 1px solid #aaa;
-    margin-bottom: 10px;
 }
 
 .summary-card .title h4 {
     font-size: 18px;
-    font-weight: 100;
+    font-weight: 400;
+    letter-spacing: 1px;
 }
 
 .summary-card #charts {
@@ -350,6 +353,12 @@ section {
     background-color: #fff;
     width: 100%;
     height: calc(100% - 132px);
+}
+
+.author-card,
+.summary-card,
+.card-panel {
+    border-radius: 6px;
 }
 
 

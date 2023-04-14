@@ -1,7 +1,7 @@
 import request from '../utils/request'
 
-export function list() {
-    return request.get('/category/list');
+export function list(param) {
+    return request.get(`/category/list?searchKey=${param?.searchKey || ''}`);
 }
 export function change(params) {
     return request.post('/category/change', params);

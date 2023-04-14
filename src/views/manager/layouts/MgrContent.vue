@@ -2,16 +2,6 @@
     <router-view />
 </template>
   
-<script>
+<script setup>
 
-export default {
-    name: "mgrcontent",
-    setup() {
-
-
-        return {
-        }
-    }
-};
 </script>
-  

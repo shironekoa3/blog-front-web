@@ -44,6 +44,19 @@ ul {
   list-style: none outside none;
 }
 
+.el-input-group__append {
+  background-color: #409eff;
+  box-shadow: 0 1px 0 0 #409eff inset, 0 -1px 0 0 #409eff inset, -1px 0 0 0 #409eff inset;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+.el-input-group__append:hover {
+  background-color: #79bbff;
+}
+.el-input-group__append:active {
+  background-color: #337ecc;
+}
+
 /* button {
   border-radius: 8px;
   border: 1px solid transparent;

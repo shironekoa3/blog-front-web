@@ -1,44 +1,45 @@
 <template>
-    <div class="comment-tip">—— 评论区 ——</div>
-    <div style="margin-top: 20px;"></div>
-    <div class="comment-list" v-if="commentListPage.length > 0">
-        <div class="comment-list-card" v-for="(comment, index) in commentListPage" :id="index">
-            <div class="comment-list-avatar">
-                <el-avatar :size="40" :src="comment.avatar" />
+    <div>
+        <div style="margin-top: 20px;"></div>
+        <div class="comment-list" v-if="commentListPage.length > 0">
+            <div class="comment-list-card" v-for="(comment, index) in commentListPage" :id="index">
+                <div class="comment-list-avatar">
+                    <el-avatar :size="40" :src="comment.avatar" />
+                </div>
+                <div class="comment-list-content" style="margin-left: 10px; width: 100%;">
+                    <p>{{ comment.nick }}<span style="margin-left: 10px; color: #999;">{{ comment.email }}</span></p>
+                    <p>{{ comment.content }}</p>
+                    <p>{{ comment.createTime }} <span @click="reply(comment)">回复</span></p>
+                </div>
             </div>
-            <div class="comment-list-content" style="margin-left: 10px; width: 100%;">
-                <p>{{ comment.nick }}<span style="margin-left: 10px; color: #999;">{{ comment.email }}</span></p>
-                <p>{{ comment.content }}</p>
-                <p>{{ comment.createTime }} <span @click="reply(comment)">回复</span></p>
+            <div style="display: flex;">
+                <el-pagination class="page" layout="prev, pager, next" background :total="50" :page-size="page.size"
+                    :page-count="page.count" v-model:current-page="page.current" />
             </div>
         </div>
-        <div style="display: flex;">
-            <el-pagination class="page" layout="prev, pager, next" background :total="50" :page-size="page.size"
-                :page-count="page.count" v-model:current-page="page.current" />
-        </div>
-    </div>
-    <div style="margin-top: 20px;"></div>
-    <div class="comment-card">
-        <div class="comment-card-info">
-            <div class="avatar">
-                <el-avatar :src="formInfo.avatar" />
+        <div style="margin-top: 20px;"></div>
+        <div class="comment-card">
+            <div class="comment-card-info">
+                <div class="avatar">
+                    <el-avatar :src="formInfo.avatar" />
+                </div>
+                <el-input v-model="formInfo.nick" @blur="nickToQQ" placeholder="* 昵称 (必填)"
+                    style="max-width: 250px; height: 40px;">
+                    <template #prepend>昵称</template>
+                </el-input>
+                <el-input v-model="formInfo.email" placeholder="邮箱 (选填)" style="max-width: 250px; height: 40px;">
+                    <template #prepend>邮箱</template>
+                </el-input>
+                <el-input v-model="formInfo.website" placeholder="网站 (选填)" style="max-width: 250px; height: 40px;">
+                    <template #prepend>网站</template>
+                </el-input>
             </div>
-            <el-input v-model="formInfo.nick" @blur="nickToQQ" placeholder="* 昵称 (必填)"
-                style="max-width: 250px; height: 40px;">
-                <template #prepend>昵称</template>
-            </el-input>
-            <el-input v-model="formInfo.email" placeholder="邮箱 (选填)" style="max-width: 250px; height: 40px;">
-                <template #prepend>邮箱</template>
-            </el-input>
-            <el-input v-model="formInfo.website" placeholder="网站 (选填)" style="max-width: 250px; height: 40px;">
-                <template #prepend>网站</template>
-            </el-input>
-        </div>
-        <div class="comment-card-content">
-            <el-input class="textarea" v-model="formInfo.content" rows="8" resize='none' type="textarea"
-                :placeholder="contentPlaceHolder"
-                input-style="border-radius: 6px; background:#fff url(/images/global/comment.png) right 10px bottom 60px no-repeat; font-size: 16px" />
-            <el-button class="submit" type="primary" @click="sendComment">发送评论</el-button>
+            <div class="comment-card-content">
+                <el-input class="textarea" v-model="formInfo.content" rows="8" resize='none' type="textarea"
+                    :placeholder="contentPlaceHolder"
+                    input-style="border-radius: 6px; background:#fff url(/images/global/comment.png) right 10px bottom 60px no-repeat; font-size: 16px" />
+                <el-button class="submit" type="primary" @click="sendComment">发送评论</el-button>
+            </div>
         </div>
     </div>
 </template>
@@ -78,6 +79,7 @@ let formInfo = reactive({
 
 const reply = (comment) => {
     formInfo.content += '@' + comment.nick + ' '
+    document.getElementsByClassName('comment-card')[0].scrollIntoView({ block: "start", behavior: "smooth" });
 }
 
 const nickToQQ = () => {
@@ -113,19 +115,7 @@ const sendComment = () => {
 }
 
 </script>
-<style>
-.comment-tip {
-    border-radius: 6px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
-    background-color: #ffffff;
-    overflow: hidden;
-    color: #303133;
-    padding: 20px;
-    font-size: 24px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    text-align: center;
-}
-
+<style scoped>
 .comment-card {
     border-radius: 6px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
@@ -187,7 +177,6 @@ const sendComment = () => {
 .comment-list-content p:nth-child(1) {
     font-size: 16px;
     color: #404044;
-    text-shadow: 0 1px 8px rgb(0 0 0 / 25%);
 }
 
 .comment-list-content p:nth-child(2) {
@@ -200,13 +189,11 @@ const sendComment = () => {
     margin: 10px 0;
     margin-right: 20px;
     letter-spacing: 1px;
-    /* text-shadow: 0 1px 8px rgb(0 0 0 / 25%); */
 }
 
 .comment-list-content p:nth-child(3) {
     font-size: 14px;
     color: #404044;
-    text-shadow: 0 1px 8px rgb(0 0 0 / 25%);
 }
 
 .comment-list-content p:nth-child(3) span {
@@ -225,18 +212,18 @@ const sendComment = () => {
     margin-top: 30px;
 }
 
-.comment-list .el-pagination.is-background .btn-next.is-active,
-.comment-list .el-pagination.is-background .btn-prev.is-active,
-.comment-list .el-pagination.is-background .el-pager li.is-active {
+:deep().comment-list .el-pagination.is-background .btn-next.is-active,
+:deep().comment-list .el-pagination.is-background .btn-prev.is-active,
+:deep().comment-list .el-pagination.is-background .el-pager li.is-active {
     background-color: #fdbc40 !important;
 }
 
 
-.comment-card .el-textarea__inner {
+:deep().comment-card .el-textarea__inner {
     padding: 10px 10px;
 }
 
-.comment-card .el-input-group__prepend {
+:deep().comment-card .el-input-group__prepend {
     padding: 0 10px;
     background-color: rgba(144, 147, 153, 0.23);
     color: #404044;

@@ -1,9 +1,23 @@
 <template>
     <div class="menu" style="margin-bottom: 20px;">
-        <el-button-group>
-            <el-button type="primary" @click='handleNewArticle'>新建文章</el-button>
-            <el-button type="primary" @click='handleRefreshList' :loading="state.isLoading">刷新列表</el-button>
-        </el-button-group>
+        <div style="float: left; margin-right: 40px; margin-bottom: 20px;">
+            <el-button-group>
+                <el-button type="primary" size="large" @click='handleNewArticle'>新建文章</el-button>
+                <el-button type="primary" size="large" @click='handleRefreshList'
+                    :loading="state.isLoading">刷新列表</el-button>
+            </el-button-group>
+        </div>
+        <div style="float: left;">
+            <el-form size="large" :inline="true" @submit.native.prevent>
+                <el-form-item label="">
+                    <el-input v-model="state.searchText" @keyup.enter.native="handleRefreshList" placeholder="按标题搜索">
+                        <template #append>
+                            <el-button type="primary" @click="handleRefreshList">搜索</el-button>
+                        </template>
+                    </el-input>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 
     <!-- 文章列表表格 -->
@@ -25,8 +39,8 @@
         <el-table-column prop="statusText" label="隐藏" width="80" align="center" />
         <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
-                <el-button link type="primary" size="small" @click="handleChange(scope.row.id)">编辑</el-button>
-                <el-button link type="danger" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
+                <el-button link type="primary" size="large" @click="handleChange(scope.row.id)">编辑</el-button>
+                <el-button link type="danger" size="large" @click="handleDelete(scope.row.id)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -49,6 +63,7 @@ let state = reactive({
     rowData: [],
     tableData: [],
     isLoading: false,
+    searchText: '',
     page: {
         size: 10,
         current: 1,
@@ -91,7 +106,9 @@ const handleRefreshList = async () => {
     state.isLoading = true
     let pageInfo = {
         'p': state.page.current,
-        'size': state.page.size
+        'size': state.page.size,
+        'type': 'title',
+        'keyword': state.searchText
     }
     list(pageInfo).then(resp => {
         if (resp.code !== 200) {

@@ -1,7 +1,7 @@
 <template>
     <el-tabs v-model="state.activeName" type="border-card">
         <el-tab-pane name="User" label="博客配置">
-            <el-form label-position="right" label-width="90" style="max-width: 600px;">
+            <el-form size="large" label-position="right" label-width="90" style="max-width: 600px;">
                 <el-form-item label="博客标题：">
                     <el-input v-model="config.title" placeholder="请输入博客标题" />
                 </el-form-item>
@@ -21,7 +21,7 @@
             </el-form>
         </el-tab-pane>
         <el-tab-pane name="Role" label="作者配置">
-            <el-form label-position="right" label-width="90" style="max-width: 600px;">
+            <el-form size="large" label-position="right" label-width="90" style="max-width: 600px;">
                 <el-form-item label="作者名称：">
                     <el-input v-model="config.author" placeholder="请输入作者名称" />
                 </el-form-item>
@@ -44,7 +44,7 @@
             </el-form>
         </el-tab-pane>
         <el-tab-pane name="Config" label="导航配置">
-            <el-form label-position="right" label-width="90" style="max-width: 600px;">
+            <el-form size="large" label-position="right" label-width="90" style="max-width: 600px;">
                 <el-form-item label="导航信息：">
                     <el-input v-model="state.navYaml" type="textarea" placeholder="使用 YAML 语法配置首页导航链接信息" rows="14" />
                 </el-form-item>
@@ -64,12 +64,19 @@
             </el-form>
         </el-tab-pane>
         <el-tab-pane name="Task" label="底部配置">
-            <el-form label-position="right" label-width="90" style="max-width: 600px;">
+            <el-form size="large" label-position="right" label-width="90" style="max-width: 600px;">
                 <el-form-item label="底部信息：">
                     <el-input v-model="config.footer" type="textarea" placeholder="填写底部信息" rows="10" />
                 </el-form-item>
                 <el-form-item label="" style="margin: 20px 0;">
                     <el-button type="primary" @click="saveOption">保存</el-button>
+                </el-form-item>
+            </el-form>
+        </el-tab-pane>
+        <el-tab-pane name="System" label="系统配置">
+            <el-form size="large" label-position="right" label-width="90" style="max-width: 600px;">
+                <el-form-item label="重置账户：">
+                    <el-button type="danger" @click="resetManager">重置管理员账户</el-button>
                 </el-form-item>
             </el-form>
         </el-tab-pane>
@@ -80,8 +87,9 @@
 import { reactive, watchEffect } from 'vue';
 import { useConfigStore } from '../../../store';
 import yaml from 'js-yaml'
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { change } from '../../../api/option';
+import { reset } from '../../../api/user';
 
 const state = reactive({
     activeName: 'User',
@@ -133,6 +141,31 @@ const saveOption = () => {
         } else {
             ElMessage.error(resp.msg)
         }
+    })
+}
+
+const resetManager = () => {
+    ElMessageBox.confirm('重置管理员账户之后会跳转到登陆页面，新输入的账号和密码即为新的管理员账户。', '确定要重置吗？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    }).then(() => {
+        reset().then(resp => {
+            if (resp.code !== 200) {
+                ElMessage.error(resp.msg)
+            } else {
+                ElMessage.success('重置成功！')
+                const token = localStorage.getItem('token');
+                if (token) {
+                    localStorage.removeItem('token')
+                }
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 1200);
+            }
+        })
+    }).catch(() => {
+        // 取消
     })
 }
 </script>

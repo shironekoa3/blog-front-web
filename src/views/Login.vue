@@ -21,8 +21,9 @@
                             placeholder="请输入账号" input-style="font-size: 18px; color: #000;" />
                     </el-form-item>
                     <el-form-item>
-                        <el-input size="large" maxlength="20" v-model="userData.password" type="password" autocomplete="off"
-                            placeholder="请输入密码" input-style="font-size: 18px; color: #000;" />
+                        <el-input size="large" maxlength="20" v-model="userData.password" type="password"
+                            @keydown.enter.native="loginHandle" autocomplete="off" placeholder="请输入密码"
+                            input-style="font-size: 18px; color: #000;" />
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox label="记住我" v-model="userData.isRemember" style="font-size: 20px;" />

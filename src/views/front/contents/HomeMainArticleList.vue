@@ -45,10 +45,10 @@ const refreshArticlePage = () => {
             isLoading.value = false
 
             // 滚动
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            })
+            // window.scrollTo({
+            //     top: 0,
+            //     behavior: 'smooth'
+            // })
         }
     })
 }

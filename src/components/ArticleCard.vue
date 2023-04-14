@@ -35,7 +35,8 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-defineProps({
+import { onMounted } from 'vue';
+const props = defineProps({
     article: {
         default: {
             id: 1,
@@ -59,7 +60,9 @@ defineProps({
 })
 
 let router = useRouter()
-
+onMounted(()=>{
+    console.log(props);
+})
 </script>
 <style scoped>
 .article-card {

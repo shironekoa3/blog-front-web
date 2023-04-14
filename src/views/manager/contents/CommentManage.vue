@@ -1,8 +1,22 @@
 <template>
     <div class="menu" style="margin-bottom: 20px;">
-        <el-button-group>
-            <el-button type="primary" @click='handleRefreshList' :loading="state.isLoading">刷新列表</el-button>
-        </el-button-group>
+        <div style="float: left; margin-right: 40px; margin-bottom: 20px;">
+            <el-button-group>
+                <el-button type="primary" size="large" @click='handleRefreshList'
+                    :loading="state.isLoading">刷新列表</el-button>
+            </el-button-group>
+        </div>
+        <div style="float: left;">
+            <el-form size="large" :inline="true" @submit.native.prevent>
+                <el-form-item label="">
+                    <el-input v-model="state.searchText" @keyup.enter.native="handleRefreshList" placeholder="搜索评论">
+                        <template #append>
+                            <el-button type="primary" @click="handleRefreshList">搜索</el-button>
+                        </template>
+                    </el-input>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 
     <!-- 列表表格 -->
@@ -22,7 +36,7 @@
         <el-table-column prop="updateTime" label="更新时间" min-width="180" />
         <el-table-column fixed="right" label="操作" width="80" align="center">
             <template #default="scope">
-                <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+                <el-button link type="danger" size="large" @click="handleDelete(scope.row)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -44,6 +58,7 @@ let state = reactive({
     rawData: [],
     tableData: [],
     isLoading: false,
+    searchText: '',
     page: {
         size: 10,
         current: 1,
@@ -74,7 +89,10 @@ const handleDelete = (row) => {
 // 刷新
 const handleRefreshList = () => {
     state.isLoading = true
-    list().then(resp => {
+    let param = {
+        searchKey: state.searchText
+    }
+    list(param).then(resp => {
         if (resp.code !== 200) {
             ElMessage.error(resp.msg)
         } else {

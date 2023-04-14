@@ -1,9 +1,23 @@
 <template>
     <div class="menu" style="margin-bottom: 20px;">
-        <el-button-group>
-            <el-button type="primary" @click='openDialog(0)'>添加分类</el-button>
-            <el-button type="primary" @click='handleRefreshList' :loading="state.isLoading">刷新列表</el-button>
-        </el-button-group>
+        <div style="float: left; margin-right: 40px; margin-bottom: 20px;">
+            <el-button-group>
+                <el-button type="primary" size="large" @click='openDialog(0)'>添加分类</el-button>
+                <el-button type="primary" size="large" @click='handleRefreshList'
+                    :loading="state.isLoading">刷新列表</el-button>
+            </el-button-group>
+        </div>
+        <div style="float: left;">
+            <el-form size="large" :inline="true" @submit.native.prevent>
+                <el-form-item label="">
+                    <el-input v-model="state.searchText" @keyup.enter.native="handleRefreshList" placeholder="按名称或描述搜索">
+                        <template #append>
+                            <el-button type="primary" @click="handleRefreshList">搜索</el-button>
+                        </template>
+                    </el-input>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 
     <!-- 列表表格 -->
@@ -20,8 +34,8 @@
         <el-table-column prop="updateTime" label="更新时间" min-width="180" />
         <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
-                <el-button link type="primary" size="small" @click="openDialog(scope.row)">修改</el-button>
-                <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+                <el-button link type="primary" size="large" @click="openDialog(scope.row)">修改</el-button>
+                <el-button link type="danger" size="large" @click="handleDelete(scope.row)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -35,7 +49,7 @@
     <!-- 添加/修改对话框 -->
     <el-dialog v-model="state.dialogVisible" :title="state.optionItem.id === 0 ? '添加' : '修改'" width="500"
         style="padding: 0 20px;">
-        <el-form label-position="right" label-width="auto" style="max-width: 460px;">
+        <el-form size="large" label-position="right" label-width="auto" style="max-width: 460px;">
             <el-form-item label="分类名称：">
                 <el-input v-model="state.optionItem.name" placeholder="输入分类名称" />
             </el-form-item>
@@ -45,17 +59,18 @@
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="state.dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="handleChange">{{ state.optionItem.id === 0 ? '添加' : '修改' }}</el-button>
+                <el-button size="large" @click="state.dialogVisible = false">取消</el-button>
+                <el-button type="primary" size="large" @click="handleChange">{{ state.optionItem.id === 0 ? '添加' : '修改' }}</el-button>
             </span>
         </template>
     </el-dialog>
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onMounted, watchEffect } from 'vue'
+import { ref, reactive, toRefs, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { list, change, del } from '../../../api/category'
+import { Parabola } from '@icon-park/vue-next';
 let state = reactive({
     rowData: [],
     tableData: [],
@@ -66,6 +81,7 @@ let state = reactive({
     },
     dialogVisible: false,
     isLoading: false,
+    searchText: '',
     page: {
         size: 10,
         current: 1,
@@ -139,22 +155,30 @@ const handleDelete = (row) => {
 // 刷新
 const handleRefreshList = () => {
     state.isLoading = true
-    list().then(resp => {
+    let param = {
+        searchKey: state.searchText
+    }
+    list(param).then(resp => {
         if (resp.code !== 200) {
             ElMessage.error(resp.msg)
         } else {
             state.rowData = resp.data
-            console.log(state.rowData)
             state.page.count = Math.ceil(state.rowData.length / state.page.size)
+            let start = (state.page.current - 1) * state.page.size
+            state.tableData = state.rowData.slice(start, start + state.page.size)
         }
         state.isLoading = false;
     })
-
 }
 
-watchEffect(() => {
-    let start = (state.page.current - 1) * state.page.size
-    state.tableData = state.rowData.slice(start, start + state.page.size)
+watch(() => state.page.current, () => {
+    state.tableData = []
+    state.isLoading = true
+    setTimeout(() => {
+        let start = (state.page.current - 1) * state.page.size
+        state.tableData = state.rowData.slice(start, start + state.page.size)
+        state.isLoading = false
+    }, 200);
 })
 </script>
 

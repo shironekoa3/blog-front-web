@@ -6,3 +6,6 @@ export function login(params) {
 export function logout() {
     return request.get('/user/logout');
 }
+export function reset() {
+    return request.get('/user/reset');
+}

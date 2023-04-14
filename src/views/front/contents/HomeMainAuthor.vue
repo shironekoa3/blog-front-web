@@ -46,7 +46,7 @@ let timerId = 0
 const avatarClick = () => {
     clearTimeout(timerId)
     count.value++
-    if (count.value >= 5) {
+    if (count.value >= 3) {
         count.value = 0
         router.push('/manager')
     } else {
