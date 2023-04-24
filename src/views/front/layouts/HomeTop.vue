@@ -60,6 +60,7 @@ header {
     background-size: cover;
     background-position: center;
     background-color: #6dc1f7;
+    transition: background-image 0.5s;
 }
 
 .header-hidden {
@@ -81,6 +82,18 @@ header {
     margin-top: -50px;
     letter-spacing: 5px;
     font-size: 36px;
+    animation: textFadeIn 1s;
+    transition: all 2s;
+}
+
+@keyframes textFadeIn {
+    0% {
+        transform: translateY(-100px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
 .information p {

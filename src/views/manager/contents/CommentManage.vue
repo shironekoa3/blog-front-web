@@ -2,8 +2,10 @@
     <div class="menu" style="margin-bottom: 20px;">
         <div style="float: left; margin-right: 40px; margin-bottom: 20px;">
             <el-button-group>
-                <el-button type="primary" size="large" @click='handleRefreshList'
-                    :loading="state.isLoading">刷新列表</el-button>
+                <el-button type="primary" size="large" @click='handleRefreshList' :loading="state.isLoading">
+                    <el-icon class="el-icon--left" v-if="!state.isLoading">
+                        <Refresh />
+                    </el-icon>刷新列表</el-button>
             </el-button-group>
         </div>
         <div style="float: left;">
@@ -11,7 +13,12 @@
                 <el-form-item label="">
                     <el-input v-model="state.searchText" @keyup.enter.native="handleRefreshList" placeholder="搜索评论">
                         <template #append>
-                            <el-button type="primary" @click="handleRefreshList">搜索</el-button>
+                            <el-button type="primary" @click="handleRefreshList">
+                                搜索
+                                <el-icon class="el-icon--right">
+                                    <Search />
+                                </el-icon>
+                            </el-button>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -47,12 +54,11 @@
             v-model:current-page="state.page.current" style="padding-top: 14px;" />
     </div>
 </template>
-  
+
 <script setup>
 import { reactive, watchEffect } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { list, del } from '../../../api/comment'
-
+import { list, del } from '@/api/comment'
 
 let state = reactive({
     rawData: [],

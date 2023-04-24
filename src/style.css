@@ -44,15 +44,31 @@ ul {
   list-style: none outside none;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #a0a0a0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .el-input-group__append {
   background-color: #409eff;
   box-shadow: 0 1px 0 0 #409eff inset, 0 -1px 0 0 #409eff inset, -1px 0 0 0 #409eff inset;
   color: #fff;
   transition: background-color 0.2s;
 }
+
 .el-input-group__append:hover {
   background-color: #79bbff;
 }
+
 .el-input-group__append:active {
   background-color: #337ecc;
 }

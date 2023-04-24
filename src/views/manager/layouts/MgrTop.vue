@@ -21,8 +21,8 @@
 </template>
   
 <script setup>
-import { useConfigStore } from '../../../store';
-import { logout } from '../../../api/user'
+import { useConfigStore } from '@/store';
+import { logout } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 let { config } = useConfigStore()

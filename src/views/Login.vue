@@ -42,8 +42,8 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { reactive } from 'vue';
-import { login } from '../api/user';
-import router from '../router';
+import { login } from '@/api/user';
+import router from '@/router';
 
 let userData = reactive({
     username: '',

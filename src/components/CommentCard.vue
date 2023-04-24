@@ -47,7 +47,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { reactive, watchEffect } from 'vue'
-import { getQQInfo } from '../api/comment';
+import { getQQInfo } from '@/api/comment';
 const emits = defineEmits(['onSendComment'])
 const props = defineProps(['commentList'])
 

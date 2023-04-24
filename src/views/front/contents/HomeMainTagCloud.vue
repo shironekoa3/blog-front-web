@@ -6,9 +6,8 @@
         <template #default>
             <div class="tag-cloud">
                 <ul>
-                    <li v-for="(tag, i) in config.tags.splice(0, 15)" :id="i">
-                        <a href="#" class="tag-cloud-item" v-text="tag.name"
-                            :style="{ backgroundColor: getRandomColor() }"></a>
+                    <li v-for="(tag, i) in config.tags.splice(0, 15)" :id="i" @click="changeSearchCondition(tag)">
+                        <a class="tag-cloud-item" v-text="tag.name" :style="{ backgroundColor: getRandomColor() }"></a>
                     </li>
                 </ul>
             </div>
@@ -17,9 +16,9 @@
 </template>
 
 <script setup>
-import HomeCard from '../../../components/HomeCard.vue';
-import { useConfigStore } from '../../../store';
-import { list } from '../../../api/tag';
+import HomeCard from '@/components/HomeCard.vue';
+import { useConfigStore } from '@/store';
+import { list } from '@/api/tag';
 
 const { config } = useConfigStore()
 
@@ -34,8 +33,13 @@ list().then(response => {
 
 const getRandomColor = () => {
     // let colorList = ['#fdc400', '#e66c70', '#f8ba3c', '#ea5455', '#00eaff', '#ed71b4', '#45c17a', '#ef93fa', '#ff52e5', '#fd999d']
-    let colorList = ['#96514d', '#deb068', '#f09199', '#494a41', '#44617b', '#a86965']
+    let colorList = ['#4c83ff', '#7367f0', '#28c76f', '#ff52e5', '#e96d71', '#fa742b']
     return colorList[Math.floor(Math.random() * colorList.length)]
+}
+
+const changeSearchCondition = (tag) => {
+    config.search.type = 'tag'
+    config.search.keyword = tag.name
 }
 
 </script>
@@ -49,6 +53,7 @@ const getRandomColor = () => {
 .tag-cloud li {
     float: left;
     padding: 5px;
+    cursor: pointer;
 }
 
 .tag-cloud-item {

@@ -8,76 +8,83 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: () => import('../views/front/Home.vue'),
+            component: () => import('@/views/front/Home.vue'),
             children: [
                 {
                     path: '/',
                     name: 'HomeMainArticleList',
-                    component: () => import('../views/front/contents/HomeMainArticleList.vue')
+                    component: () => import('@/views/front/contents/HomeMainArticleList.vue')
                 },
                 {
                     path: '/article/:id',
                     name: 'ArticleDetail',
-                    component: () => import('../views/front/contents/HomeMainArticleDetail.vue')
+                    component: () => import('@/views/front/contents/HomeMainArticleDetail.vue')
                 }
             ]
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('../views/Login.vue')
+            component: () => import('@/views/Login.vue')
         },
         {
             path: '/manager',
             name: 'mgrmain',
-            component: () => import('../views/manager/MgrMain.vue'),
+            component: () => import('@/views/manager/MgrMain.vue'),
             redirect: '/manager/dashboard',
             children: [{
                 path: '/manager/dashboard',
                 name: 'dashboard',
-                component: () => import('../views/manager/contents/Dashboard.vue'),
+                component: () => import('@/views/manager/contents/Dashboard.vue'),
                 meta: {
                     requireAuth: true // 配置需要登录才能访问
                 }
             }, {
                 path: '/manager/article/edit/:id',
                 name: 'ArticleEdit',
-                component: () => import('../views/manager/contents/ArticleEdit.vue'),
+                component: () => import('@/views/manager/contents/ArticleEdit.vue'),
                 meta: {
                     requireAuth: true
                 }
             }, {
                 path: '/manager/article/list',
                 name: 'ArticleList',
-                component: () => import('../views/manager/contents/ArticleList.vue'),
+                component: () => import('@/views/manager/contents/ArticleList.vue'),
                 meta: {
                     requireAuth: true
                 }
             }, {
                 path: '/manager/tag',
                 name: 'TagManage',
-                component: () => import('../views/manager/contents/TagManage.vue'),
+                component: () => import('@/views/manager/contents/TagManage.vue'),
                 meta: {
                     requireAuth: true
                 }
             }, {
                 path: '/manager/category',
                 name: 'CategoryManage',
-                component: () => import('../views/manager/contents/CategoryManage.vue'),
+                component: () => import('@/views/manager/contents/CategoryManage.vue'),
                 meta: {
                     requireAuth: true
                 }
             }, {
                 path: '/manager/comment',
                 name: 'CommentManage',
-                component: () => import('../views/manager/contents/CommentManage.vue'),
+                component: () => import('@/views/manager/contents/CommentManage.vue'),
                 meta: {
                     requireAuth: true
                 }
             }, {
                 path: '/manager/setting',
                 name: 'Setting',
-                component: () => import('../views/manager/contents/Setting.vue'),
+                component: () => import('@/views/manager/contents/Setting.vue'),
+                meta: {
+                    requireAuth: true
+                }
+            }, {
+                path: '/manager/logininfor',
+                name: 'Logininfor',
+                component: () => import('@/views/manager/contents/Logininfor.vue'),
                 meta: {
                     requireAuth: true
                 }

@@ -1,4 +1,4 @@
-<template>
+<template >
     <HomeTop />
     <main>
         <div class="main-left">
@@ -39,7 +39,7 @@
 
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
-import { useConfigStore } from '../../store';
+import { useConfigStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
 import HomeMainLeft from './layouts/HomeMainLeft.vue';
 import HomeMainRight from './layouts/HomeMainRight.vue';
@@ -57,7 +57,9 @@ function scrollToTop() {
 }
 
 function toHome() {
-    console.log(route);
+    // console.log(route);
+    config.search.type = ''
+    config.search.keyword = ''
     scrollToTop();
     router.push('/');
 }

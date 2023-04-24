@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { defineStore } from "pinia";
-import { listHome as listOption } from "../api/option";
+import { listHome as listOption } from "@/api/option";
 import { ElMessage } from "element-plus";
 
 export const useConfigStore = defineStore('config', () => {
@@ -19,10 +19,10 @@ export const useConfigStore = defineStore('config', () => {
         articleCount: 0,
         tagCount: 0,
         categoryCount: 0,
-        articleCount: 0,
         nav: {},
         footer: '',
         isShowDescription: true,
+        articles: [],
         tags: [],
         currArticle: {
             id: 0,
@@ -41,6 +41,11 @@ export const useConfigStore = defineStore('config', () => {
             thumbnail: '',
             viewCount: 0
         },
+        // 文章搜索
+        search: {
+            type: '',
+            keyword: ''
+        }
     })
 
 

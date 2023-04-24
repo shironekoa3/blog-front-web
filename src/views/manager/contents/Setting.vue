@@ -85,11 +85,11 @@
 
 <script setup>
 import { reactive, watchEffect } from 'vue';
-import { useConfigStore } from '../../../store';
+import { useConfigStore } from '@/store';
 import yaml from 'js-yaml'
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { change } from '../../../api/option';
-import { reset } from '../../../api/user';
+import { change } from '@/api/option';
+import { reset } from '@/api/user';
 
 const state = reactive({
     activeName: 'User',

@@ -2,9 +2,9 @@
     <div class="article-detail-box">
         <nav>
             <i-home theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
-            <RouterLink to="/">首页</RouterLink>
+            <RouterLink to="/">返回</RouterLink>
             <span> / </span>
-            <a href="/">{{ article.category.name }}</a>
+            <RouterLink to="/" @click="setSearch">{{ article.category.name }}</RouterLink>
             <span> / </span>
             <span style="color: #73aaff">正文</span>
         </nav>
@@ -18,8 +18,9 @@
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { RouterLink, useRouter } from 'vue-router';
+import { useConfigStore } from '@/store';
 
-defineProps({
+let props = defineProps({
     article: {
         default: {
             id: 1,
@@ -43,10 +44,16 @@ defineProps({
     }
 })
 let router = useRouter()
-
+let { config } = useConfigStore()
 function returnToHome() {
     router.push('/')
 }
+
+const setSearch = () => {
+    config.search.type = 'category'
+    config.search.keyword = props.article.category.name
+}
+
 </script>
 <style scoped>
 .article-detail-box {

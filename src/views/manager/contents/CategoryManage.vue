@@ -2,9 +2,14 @@
     <div class="menu" style="margin-bottom: 20px;">
         <div style="float: left; margin-right: 40px; margin-bottom: 20px;">
             <el-button-group>
-                <el-button type="primary" size="large" @click='openDialog(0)'>添加分类</el-button>
-                <el-button type="primary" size="large" @click='handleRefreshList'
-                    :loading="state.isLoading">刷新列表</el-button>
+                <el-button type="primary" size="large" @click='openDialog(0)'>
+                    <el-icon class="el-icon--left">
+                        <Plus />
+                    </el-icon>添加分类</el-button>
+                <el-button type="primary" size="large" @click='handleRefreshList' :loading="state.isLoading">
+                    <el-icon class="el-icon--left" v-if="!state.isLoading">
+                        <Refresh />
+                    </el-icon>刷新列表</el-button>
             </el-button-group>
         </div>
         <div style="float: left;">
@@ -12,7 +17,11 @@
                 <el-form-item label="">
                     <el-input v-model="state.searchText" @keyup.enter.native="handleRefreshList" placeholder="按名称或描述搜索">
                         <template #append>
-                            <el-button type="primary" @click="handleRefreshList">搜索</el-button>
+                            <el-button type="primary" @click="handleRefreshList">
+                                搜索
+                                <el-icon class="el-icon--right">
+                                    <Search />
+                                </el-icon></el-button>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -60,7 +69,8 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button size="large" @click="state.dialogVisible = false">取消</el-button>
-                <el-button type="primary" size="large" @click="handleChange">{{ state.optionItem.id === 0 ? '添加' : '修改' }}</el-button>
+                <el-button type="primary" size="large" @click="handleChange">{{ state.optionItem.id === 0 ? '添加' : '修改'
+                }}</el-button>
             </span>
         </template>
     </el-dialog>
@@ -69,8 +79,7 @@
 <script setup>
 import { ref, reactive, toRefs, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { list, change, del } from '../../../api/category'
-import { Parabola } from '@icon-park/vue-next';
+import { list, change, del } from '@/api/category'
 let state = reactive({
     rowData: [],
     tableData: [],

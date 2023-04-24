@@ -33,9 +33,9 @@
 
 <script setup>
 import { ref, toRefs, inject } from 'vue'
-import HomeCard from '../../../components/HomeCard.vue';
-import vueCountTo from '../../../components/VueCountTo/vue-countTo.vue';
-import { useConfigStore } from '../../../store';
+import HomeCard from '@/components/HomeCard.vue';
+import vueCountTo from '@/components/VueCountTo/vue-countTo.vue';
+import { useConfigStore } from '@/store';
 import { useRouter } from 'vue-router';
 
 let count = ref(0)

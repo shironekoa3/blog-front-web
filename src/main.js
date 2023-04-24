@@ -4,6 +4,7 @@ import router from './router'
 import App from './App.vue'
 
 import ElementPlus from 'element-plus'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
 import './style.css'
 
@@ -20,10 +21,15 @@ const app = createApp(App)
 const pinia = createPinia()
 
 // 将所有图标注册组件
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 for (const [key, component] of Object.entries(IconPark)) {
     app.component('I' + key, component)
 }
 
+
+  
 app.use(ElementPlus)
 
 app.use(router)

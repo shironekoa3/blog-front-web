@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { useConfigStore } from '../../../store';
+import { useConfigStore } from '@/store';
 
 let { config } = useConfigStore()
 

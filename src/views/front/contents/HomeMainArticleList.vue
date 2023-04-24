@@ -1,10 +1,16 @@
 <template>
+    <div class="article-filter-text" v-if="config.search.type.length !== 0">
+        {{ config.search.keyword }}
+        <div class="article-filter-return" style="float: left;" @click="clearSearch">
+            &lt; 返回列表
+        </div>
+    </div>
     <div class="article-list" v-box-loading="isLoading">
         <div class="article-item" v-for="(article, i) in config.articles" :id="i" style="margin-bottom: 20px;">
             <ArticleCard :article="article" />
         </div>
     </div>
-    <div class="pagination-box">
+    <div class="pagination-box" v-if="config.articles.length > 0">
         <!-- <el-pagination class="pagination" background layout="prev, pager, next" :total="1000" /> -->
         <el-pagination class="pagination" background layout="prev, pager, next" :page-size="page.size"
             :page-count="page.count" v-model:current-page="page.current" @current-change="refreshArticlePage" />
@@ -12,10 +18,10 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-import ArticleCard from '../../../components/ArticleCard.vue';
-import { useConfigStore } from '../../../store';
-import { listHome } from '../../../api/article';
+import { ref, reactive, watch, watchEffect } from 'vue';
+import ArticleCard from '@/components/ArticleCard.vue';
+import { useConfigStore } from '@/store';
+import { listHome } from '@/api/article';
 import { useRouter } from 'vue-router';
 
 let page = reactive({
@@ -33,7 +39,13 @@ const refreshArticlePage = () => {
     isLoading.value = true
 
     // 获取文章数据
-    listHome({ p: page.current, size: page.size }).then(response => {
+    let param = {
+        p: page.current,
+        size: page.size,
+        type: config.search.type,
+        keyword: config.search.keyword
+    }
+    listHome(param).then(response => {
         if (response.code !== 200) {
             ElMessage.error(response.msg)
         } else {
@@ -53,11 +65,45 @@ const refreshArticlePage = () => {
     })
 }
 refreshArticlePage()
+
+watch([() => config.search.type, () => config.search.keyword], () => {
+    refreshArticlePage();
+})
+
+const clearSearch = () => {
+    config.search.type = ''
+    config.search.keyword = ''
+}
+
 </script>
 
 <style>
-.article-list {
-    min-height: 500px;
+.article-filter-text {
+    border-radius: 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+    background-color: #ffffff;
+    overflow: hidden;
+    color: #303133;
+    padding: 20px;
+    font-size: 24px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.article-filter-return {
+    position: absolute;
+    left: 30px;
+    top: 25px;
+    color: #303133;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.article-filter-return:hover {
+    color: #73aaff;
 }
 
 .article-item {

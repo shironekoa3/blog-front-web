@@ -11,13 +11,13 @@
 
 <script setup>
 import { ref, reactive, toRef, toRefs, onUnmounted } from 'vue';
-import ArticleCopyright from '../../../components/ArticleCopyright.vue';
-import ArticleDetail from '../../../components/ArticleDetail.vue';
-import { useConfigStore } from '../../../store';
+import ArticleCopyright from '@/components/ArticleCopyright.vue';
+import ArticleDetail from '@/components/ArticleDetail.vue';
+import { useConfigStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
-import { get as getArticle } from '../../../api/article';
-import { getByArticleId, save as saveComment } from '../../../api/comment';
-import CommentCard from '../../../components/CommentCard.vue';
+import { get as getArticle } from '@/api/article';
+import { getByArticleId, save as saveComment } from '@/api/comment';
+import CommentCard from '@/components/CommentCard.vue';
 import { ElMessage, ElNotification } from 'element-plus';
 
 

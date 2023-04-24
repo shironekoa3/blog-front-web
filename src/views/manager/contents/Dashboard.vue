@@ -11,82 +11,25 @@
                         <p>超级管理员</p>
                     </div>
                 </div>
-
                 <div class="login-info-box">
-                    <p>上次登陆地点：<span>{{ state.tableData[0]?.location || '****' }}</span></p>
-                    <p>上次登陆时间：<span>{{ state.tableData[0]?.createTime || '****-**-** **:**:**' }}</span></p>
+                    <p>上次登陆地点：<span>{{ state.lastLogin.location }}</span></p>
+                    <p>上次登陆时间：<span>{{ state.lastLogin.createTime }}</span></p>
                 </div>
             </div>
             <div class="summary-card">
                 <div class="title">
                     <h4>文章分类数量</h4>
                 </div>
-                <div class="charts" id="charts" v-loading="state.isChartLoading">
-
-                </div>
+                <DashboardArticleCategoryChart />
             </div>
         </div>
         <div class="right-panel">
             <div class="card-panels">
-                <div class="card-panel">
-                    <div class="card-panel-icon-wrapper">
-                        <list-view theme="outline" size="72" fill="#333" :strokeWidth="2" />
-                    </div>
-                    <div class="card-panel-description">
-                        <div class="card-panel-text">
-                            文章数量
-                        </div>
-                        <count-to :start-val="0" :end-val="config.articleCount" :duration="2000" class="card-panel-num" />
-                    </div>
-                </div>
-                <div class="card-panel">
-                    <div class="card-panel-icon-wrapper">
-                        <category-management theme="outline" size="72" fill="#333" :strokeWidth="2" />
-                    </div>
-                    <div class="card-panel-description">
-                        <div class="card-panel-text">
-                            分类数量
-                        </div>
-                        <count-to :start-val="0" :end-val="config.categoryCount" :duration="2000" class="card-panel-num" />
-                    </div>
-                </div>
-                <div class="card-panel">
-                    <div class="card-panel-icon-wrapper">
-                        <tag theme="outline" size="72" fill="#333" :strokeWidth="2" />
-                    </div>
-                    <div class="card-panel-description">
-                        <div class="card-panel-text">
-                            标签数量
-                        </div>
-                        <count-to :start-val="0" :end-val="config.tagCount" :duration="2000" class="card-panel-num" />
-                    </div>
-                </div>
-                <div class="card-panel">
-                    <div class="card-panel-icon-wrapper">
-                        <chart-histogram theme="outline" size="72" fill="#333" :strokeWidth="2" />
-                    </div>
-                    <div class="card-panel-description">
-                        <div class="card-panel-text">
-                            访问数量
-                        </div>
-                        <count-to :start-val="0" :end-val="config.viewCount" :duration="2000" class="card-panel-num" />
-                    </div>
-                </div>
+                <DashboardCards :article-count="config.articleCount" :category-count="config.categoryCount"
+                    :tag-count="config.tagCount" :view-count="config.viewCount" />
             </div>
-            <div class="login-records">
-                <el-table v-loading="state.isLogininforLoading" :data="state.tableData" stripe border style="height: 100%;">
-                    <el-table-column label="编号" width="60" align="center">
-                        <template #default="scope">
-                            {{ scope.$index + 1 }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="username" label="用户名" min-width="120" />
-                    <el-table-column prop="ipaddr" label="IP地址" min-width="120" align="center" />
-                    <el-table-column prop="location" label="位置" min-width="120" />
-                    <el-table-column prop="browser" label="浏览器" min-width="120" align="center" />
-                    <el-table-column prop="os" label="系统" min-width="120" />
-                    <el-table-column prop="createTime" label="登陆时间" width="180" />
-                </el-table>
+            <div class="access-statistical">
+                <DashboardAccessChart />
             </div>
         </div>
     </section>
@@ -94,141 +37,52 @@
 
 
 <script setup>
-import CountTo from '../../../components/VueCountTo/vue-countTo.vue'
-import * as echarts from 'echarts';
-import { reactive, onMounted, onUnmounted } from 'vue';
-import { useConfigStore } from '../../../store';
-import { ListView, CategoryManagement, Tag, ChartHistogram } from '@icon-park/vue-next'
-import { list as listLogininfor } from '../../../api/logininfor';
-import { list as listCategory } from '../../../api/category';
+import { reactive } from 'vue';
+import { useConfigStore } from '@/store';
+import { list as listLogininfor } from '@/api/logininfor';
 import { ElMessage } from 'element-plus';
+import DashboardAccessChart from './DashboardAccessChart.vue';
+import DashboardArticleCategoryChart from './DashboardArticleCategoryChart.vue'
+import DashboardCards from './DashboardCards.vue';
+
 
 let state = reactive({
-    isLogininforLoading: true,
-    isChartLoading: true,
-    tableData: [],
-    categoryDate: [],
-    categoryArticleCountData: []
+    lastLogin: {
+        location: '****',
+        createTime: '****-**-** **:**:**'
+    }
 })
 
 let { config } = useConfigStore()
-
-let myChart
-let option = {
-    color: ["#3398DB"],
-    title: {
-        show: false
-    },
-    tooltip: {
-        trigger: "axis",
-        axisPointer: {
-            type: "shadow"
-        }
-    },
-    xAxis: {
-        show: true
-    },
-    yAxis: {
-        type: 'category',
-        data: [],
-        animationDuration: 300,
-        animationDurationUpdate: 300,
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        }
-    },
-    series: [
-        {
-            name: '文章数量',
-            type: 'bar',
-            data: [],
-            label: {
-                show: true,
-                position: 'right',
-                valueAnimation: true
-            }
-        }
-    ],
-    legend: {
-        show: false
-    },
-    grid: {
-        top: '4%',//距上边距
-        left: '2%',//距离左边距
-        right: '8%',//距离右边距
-        bottom: '6%',//距离下边距
-        containLabel: true
-    }
-}
-
-// 分类文章数量
-listCategory().then(resp => {
-    if (resp.code !== 200) {
-        ElMessage.error(resp.msg)
-    } else {
-        let tempData = resp.data.sort((a, b) => a.articleCount - b.articleCount)
-        option.yAxis.data = tempData.map(i => i.name)
-        option.series[0].data = tempData.map(i => i.articleCount)
-        state.isChartLoading = false
-        console.log(option.yAxis.data);
-        console.log(option.series[0].data);
-        initChart();
-    }
-})
-
 
 // 获取登陆信息
 listLogininfor().then(resp => {
     if (resp.code !== 200) {
         ElMessage.error(resp.msg)
     } else {
-        state.tableData = resp.data.sort((a, b) => {
+        let tempdata = resp.data.sort((a, b) => {
             return new Date(b.createTime) - new Date(a.createTime)
         })
-        state.isLogininforLoading = false
+
+        if (tempdata.length > 0) {
+            state.lastLogin.location = tempdata[0].location
+            state.lastLogin.createTime = tempdata[0].createTime
+        }
     }
 })
-
-onMounted(() => {
-    // 添加窗口监视
-    window.addEventListener('resize', refreshChart)
-})
-
-onUnmounted(() => {
-    // 卸载监视
-    window.removeEventListener('resize', refreshChart)
-})
-
-function initChart() {
-    // 加载图表
-    let chartDom = document.getElementById('charts');
-    if (echarts.getInstanceByDom(chartDom)) {
-        echarts.getInstanceByDom(chartDom).dispose()
-    }
-    myChart = echarts.init(chartDom);
-    option && myChart.setOption(option);
-}
-function refreshChart() {
-    if (myChart) {
-        myChart.resize()
-    }
-}
 </script>
   
 <style scoped>
 section {
     display: flex;
     height: calc(100vh - 100px);
-    overflow: hidden;
 }
 
 .left-panel {
     min-width: 320px;
-    height: 100%;
     margin-right: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .author-card {
@@ -246,6 +100,7 @@ section {
     width: 100px;
     height: 100px;
     background-color: #ccc;
+    border-radius: 4px;
 }
 
 .author-card .img-box div:nth-child(2) {
@@ -279,7 +134,7 @@ section {
 
 .summary-card {
     min-width: 320px;
-    height: calc(100vh - 342px);
+    flex-grow: 1;
     margin-top: 20px;
     background-color: #fff;
 }
@@ -348,11 +203,14 @@ section {
     text-align: center;
 }
 
-/* 登录记录表 */
-.right-panel .login-records {
+/* 访问记录 */
+.right-panel .access-statistical {
+    margin-top: 20px;
     background-color: #fff;
     width: 100%;
-    height: calc(100% - 132px);
+    /* height: calc(100% - 132px); */
+    flex-grow: 1;
+    border-radius: 6px;
 }
 
 .author-card,
@@ -389,7 +247,7 @@ section {
         flex-direction: column;
     }
 
-    .right-panel .login-records {
+    .right-panel .access-statistical {
         height: calc(100% - 199px);
     }
 }

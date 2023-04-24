@@ -7,7 +7,7 @@
             <div class="info-box">
                 <div class="info-box-item">
                     <i-calendar theme="filled" size="18" fill="#fdbc40" style="vertical-align: -3px; margin-right: 4px;" />
-                    <span>发表于{{ article.createTime }}</span>
+                    <span>{{ article.createTime }}</span>
                 </div>
                 <div class="info-box-item">
                     <i-category-management theme="filled" size="18" fill="#fc625d"
@@ -35,7 +35,6 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { onMounted } from 'vue';
 const props = defineProps({
     article: {
         default: {
@@ -60,9 +59,7 @@ const props = defineProps({
 })
 
 let router = useRouter()
-onMounted(()=>{
-    console.log(props);
-})
+
 </script>
 <style scoped>
 .article-card {

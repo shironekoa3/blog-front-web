@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { useConfigStore } from '../store';
+import { useConfigStore } from '@/store';
 const { config } = useConfigStore()
 
 let link = window.location.href
