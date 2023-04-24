@@ -16,13 +16,13 @@ export default defineConfig(({ mode, command }) => {
     },
     server: {
       port: 80,
-      proxy: {
-        '/api': {
-          target: env.VITE_APP_BASE_API,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      }
+      // proxy: {
+      //   '/api': {
+      //     target: env.VITE_APP_BASE_API,
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api/, '')
+      //   }
+      // }
     }
   }
 })
