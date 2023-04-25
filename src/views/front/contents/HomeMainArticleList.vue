@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="article-list" v-box-loading="isLoading">
-        <div class="article-item" v-for="(article, i) in config.articles" :id="i" style="margin-bottom: 20px;">
+        <div class="article-item" v-for="(article, i) in config.articles" :key="i" style="margin-bottom: 20px;">
             <ArticleCard :article="article" />
         </div>
     </div>

@@ -21,7 +21,6 @@ export const useConfigStore = defineStore('config', () => {
         categoryCount: 0,
         nav: {},
         footer: '',
-        isShowDescription: true,
         articles: [],
         tags: [],
         currArticle: {

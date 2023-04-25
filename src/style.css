@@ -36,6 +36,10 @@ a:hover {
   color: white;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background-color: #eee;
 }

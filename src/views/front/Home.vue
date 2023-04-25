@@ -1,4 +1,5 @@
 <template >
+    <HomeTopNav />
     <HomeTop />
     <main>
         <div class="main-left">
@@ -44,6 +45,7 @@ import { useRoute, useRouter } from 'vue-router';
 import HomeMainLeft from './layouts/HomeMainLeft.vue';
 import HomeMainRight from './layouts/HomeMainRight.vue';
 import HomeTop from './layouts/HomeTop.vue';
+import HomeTopNav from './layouts/HomeTopNav.vue';
 
 let { config } = useConfigStore()
 let router = useRouter()
@@ -64,7 +66,7 @@ function toHome() {
     router.push('/');
 }
 
-window.onscroll = () => {
+function handleScroll() {
     let scroll = document.documentElement.scrollTop || document.body.scrollTop;
     let rMenuButtons = document.getElementsByClassName("right-menu")[0];
     if (scroll > 300) {
@@ -72,7 +74,17 @@ window.onscroll = () => {
     } else {
         rMenuButtons.classList.remove("right-menu-active");
     }
-};
+}
+
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+})
+
 </script>
 <style scoped>
 main {
@@ -85,6 +97,32 @@ main {
 
 .main-right {
     width: 880px;
+}
+
+@media (max-width: 1220px) {
+    main {
+        width: 100vw;
+    }
+
+    .main-left {
+        display: none;
+    }
+
+    .main-right {
+        width: calc(100% - 40px);
+        margin: 0 auto;
+    }
+
+    /* .main-right {
+        width: 100%;
+    } */
+}
+
+@media (max-width: 768px) {
+    .main-right {
+        width: 100%;
+        margin: 0 auto;
+    }
 }
 
 footer {

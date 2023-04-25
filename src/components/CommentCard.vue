@@ -20,17 +20,21 @@
         <div style="margin-top: 20px;"></div>
         <div class="comment-card">
             <div class="comment-card-info">
-                <div class="avatar">
-                    <el-avatar :src="formInfo.avatar" />
+                <div class="comment-card-avatar-nick" style="display: flex; justify-content: center; align-items: center;">
+                    <div class="avatar">
+                        <el-avatar :src="formInfo.avatar" />
+                    </div>
+                    <el-input class="comment-card-info-nick" v-model="formInfo.nick" @blur="nickToQQ"
+                        placeholder="* 昵称 (必填)" style="width: 250px; height: 40px;">
+                        <template #prepend>昵称</template>
+                    </el-input>
                 </div>
-                <el-input v-model="formInfo.nick" @blur="nickToQQ" placeholder="* 昵称 (必填)"
-                    style="max-width: 250px; height: 40px;">
-                    <template #prepend>昵称</template>
-                </el-input>
-                <el-input v-model="formInfo.email" placeholder="邮箱 (选填)" style="max-width: 250px; height: 40px;">
+                <el-input class="comment-card-info-email" v-model="formInfo.email" placeholder="邮箱 (选填)"
+                    style="width: 250px; height: 40px;">
                     <template #prepend>邮箱</template>
                 </el-input>
-                <el-input v-model="formInfo.website" placeholder="网站 (选填)" style="max-width: 250px; height: 40px;">
+                <el-input class="comment-card-info-web" v-model="formInfo.website" placeholder="网站 (选填)"
+                    style="width: 250px; height: 40px;">
                     <template #prepend>网站</template>
                 </el-input>
             </div>
@@ -133,8 +137,6 @@ const sendComment = () => {
     align-items: center;
 }
 
-
-
 .comment-list-avatar,
 .comment-card-info .avatar {
     width: 40px;
@@ -142,6 +144,10 @@ const sendComment = () => {
     border: 1px solid #dcdfe6;
     border-radius: 50%;
     padding: 2px;
+}
+
+.comment-card-info .avatar {
+    margin-right: 20px;
 }
 
 .comment-card-content {
@@ -166,8 +172,6 @@ const sendComment = () => {
 }
 
 .comment-list-card {
-    /* text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); */
-    /* text-align: center; */
     display: flex;
     margin-top: 18px;
     padding-bottom: 12px;
@@ -210,6 +214,52 @@ const sendComment = () => {
 .comment-list .page {
     margin: 20px auto;
     margin-top: 30px;
+}
+
+@media (max-width: 1220px) {
+    .comment-card-info {
+        justify-content: left;
+    }
+
+    .comment-card-info-email,
+    .comment-card-info-web {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 882px) {
+    .comment-card-info .avatar {
+        display: none;
+    }
+
+    .comment-card-info {
+        justify-content: space-between;
+    }
+
+    .comment-card-info-email,
+    .comment-card-info-web {
+        margin-left: 0px;
+    }
+
+}
+
+@media (max-width: 816px) {
+    .comment-card-info {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .comment-card-info-email,
+    .comment-card-info-web {
+        margin-top: 5px;
+    }
+
+    .comment-card-avatar-nick,
+    .comment-card-info-nick,
+    .comment-card-info-email,
+    .comment-card-info-web {
+        width: 100% !important;
+    }
 }
 
 :deep().comment-list .el-pagination.is-background .btn-next.is-active,

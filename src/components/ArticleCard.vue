@@ -1,6 +1,6 @@
 <template>
     <div class="article-card">
-        <div class="content-box" :style="{ marginRight: article.thumbnail === '' ? '0' : '300px' }">
+        <div class="content-box">
             <span class="article-top" v-if="article.isTop">置顶</span>
             <!-- <RouterLink :to="article.link" class="title">{{ article.title }}</RouterLink> -->
             <a class="title" style="cursor: pointer;" @click="router.push(article.link)">{{ article.title }}</a>
@@ -20,7 +20,8 @@
                     <span>{{ article.tags.map(item => item.name).join('·') }}</span>
                 </div>
                 <div class="info-box-item">
-                    <i-camera-one theme="filled" size="18" fill="#73aaff" style="vertical-align: -3px; margin-right: 4px;" />
+                    <i-camera-one theme="filled" size="18" fill="#73aaff"
+                        style="vertical-align: -3px; margin-right: 4px;" />
                     <span>{{ article.viewCount }}</span>
                 </div>
             </div>
@@ -28,7 +29,9 @@
                 <p>{{ article.summary }}</p>
             </div>
         </div>
-        <div class="img-box" :style="{ backgroundImage: `url(${article.thumbnail})` }" v-if="article.thumbnail !== ''">
+        <div class="img-container" v-if="article.thumbnail !== ''">
+            <div class="img-box" :style="{ backgroundImage: `url(${article.thumbnail})` }">
+            </div>
         </div>
     </div>
 </template>
@@ -71,7 +74,12 @@ let router = useRouter()
     color: #303133;
     padding: 35px 40px 50px;
     position: relative;
-    max-height: 148px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-box {
+    flex: 1;
 }
 
 .title {
@@ -107,7 +115,7 @@ let router = useRouter()
 }
 
 .info-box-item {
-    margin-left: 10px;
+    margin-right: 10px;
     font-size: 16px;
     color: #8a8a8a;
 }
@@ -124,8 +132,11 @@ let router = useRouter()
     -webkit-line-clamp: 3;
     overflow: hidden;
     letter-spacing: 1px;
-    /* font-weight: 100; */
-    /* text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); */
+}
+
+.img-container {
+    width: 280px;
+    height: 100px;
 }
 
 .img-box {
@@ -136,5 +147,23 @@ let router = useRouter()
     height: 100%;
     background-size: cover;
     background-position: center;
+}
+
+@media (max-width: 768px) {
+    .article-card {
+        flex-direction: column-reverse;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .img-container {
+        width: 100%;
+        height: 280px;
+    }
+
+    .img-box {
+        width: 100%;
+        height: 300px;
+    }
 }
 </style>
